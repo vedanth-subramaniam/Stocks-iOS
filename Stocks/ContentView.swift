@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var searchText: String = ""
     var body: some View {
         
         NavigationView {
@@ -8,8 +9,9 @@ struct ContentView: View {
                 
                 Section(){
                     HStack() {
-                        Text("March 21, 2024")
-                            .bold()
+                        Text(currentDateString())
+                            .fontWeight(.ultraLight)
+                            .font(.title2)
                     }
                     .listRowBackground(Color.white)
                 }
@@ -51,8 +53,14 @@ struct ContentView: View {
                 }
             }
             .navigationBarTitle("Stocks", displayMode: .automatic)
-            
+            .searchable(text: $searchText)
         }
+    }
+    
+    func currentDateString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d, yyyy" // Format style: March 21, 2024
+        return formatter.string(from: Date())
     }
 }
 
