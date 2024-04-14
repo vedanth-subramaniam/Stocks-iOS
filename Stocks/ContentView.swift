@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var searchText: String = ""
+    @State private var fStocks = favoriteStocks
     var body: some View {
         
         NavigationView {
@@ -26,12 +27,15 @@ struct ContentView: View {
                     ForEach(portfolioStocks) { stock in
                         StockRow(stock: stock)
                     }
+                    .onDelete(perform: deleteFavorite(at:))
+                    .onMove(perform: moveFavorite(from:to:))
                 }
                 
                 Section(header: Text("FAVORITES").bold().font(.subheadline)) {
                     ForEach(favoriteStocks) { stock in
                         StockRow(stock: stock)
-                    }
+                    }.onDelete(perform: deleteFavorite(at:))
+                        .onMove(perform: moveFavorite(from:to:))
                 }
                 
                 Section {
@@ -46,20 +50,28 @@ struct ContentView: View {
                                 .foregroundColor(Color.gray)
                                 .font(.subheadline)
                             
-                            
                         }
                         Spacer()
                     }
                 }
             }
             .navigationBarTitle("Stocks", displayMode: .automatic)
+            .navigationBarItems(trailing: EditButton())
             .searchable(text: $searchText)
         }
     }
     
+    func deleteFavorite(at offsets: IndexSet) {
+        fStocks.remove(atOffsets: offsets)
+    }
+    
+    func moveFavorite(from source: IndexSet, to destination: Int) {
+        fStocks.move(fromOffsets: source, toOffset: destination)
+    }
+    
     func currentDateString() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM d, yyyy" // Format style: March 21, 2024
+        formatter.dateFormat = "MMMM d, yyyy"
         return formatter.string(from: Date())
     }
 }
