@@ -2,7 +2,15 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var searchText: String = ""
-    @State private var fStocks = favoriteStocks
+    @State private var portfolioStocks = [
+        Stock(symbol: "AAPL", companyName: "3 shares", price: "$514.31", change: "$0.62 (0.12%)", isPositive: true),
+        Stock(symbol: "NVDA", companyName: "3 shares", price: "$2748.16", change: "$9.10 (0.33%)", isPositive: true)
+    ]
+
+    @State private var favoriteStocks = [
+        Stock(symbol: "AAPL", companyName: "Apple Inc", price: "$171.44", change: "-$7.23 (-4.05%)", isPositive: false),
+        Stock(symbol: "NVDA", companyName: "NVIDIA Corp", price: "$916.05", change: "$12.33 (1.36%)", isPositive: true)
+    ]
     var body: some View {
         
         NavigationView {
@@ -19,23 +27,23 @@ struct ContentView: View {
                 
                 Section(header: Text("PORTFOLIO").bold().font(.subheadline)) {
                     HStack{
-                        PortfolioRow(label: "Net Worth", value: "$25009.72")
+                        PortfolioAccountRow(label: "Net Worth", value: "$25009.72")
                         Spacer()
-                        PortfolioRow(label: "Cash Balance", value: "$21747.26")
+                        PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
                     }
                     
                     ForEach(portfolioStocks) { stock in
-                        StockRow(stock: stock)
+                        StockDetailsHomeRow(stock: stock)
                     }
-                    .onDelete(perform: deleteFavorite(at:))
-                    .onMove(perform: moveFavorite(from:to:))
+                    .onDelete(perform: deletePortfolioStock(at:))
+                    .onMove(perform: movePortfolioStock(from:to:))
                 }
                 
                 Section(header: Text("FAVORITES").bold().font(.subheadline)) {
                     ForEach(favoriteStocks) { stock in
-                        StockRow(stock: stock)
-                    }.onDelete(perform: deleteFavorite(at:))
-                        .onMove(perform: moveFavorite(from:to:))
+                        StockDetailsHomeRow(stock: stock)
+                    }.onDelete(perform: deleteFavoriteStock(at:))
+                        .onMove(perform: moveFavoriteStock(from:to:))
                 }
                 
                 Section {
@@ -61,13 +69,22 @@ struct ContentView: View {
         }
     }
     
-    func deleteFavorite(at offsets: IndexSet) {
-        fStocks.remove(atOffsets: offsets)
+    func deletePortfolioStock(at offsets: IndexSet) {
+        portfolioStocks.remove(atOffsets: offsets)
     }
     
-    func moveFavorite(from source: IndexSet, to destination: Int) {
-        fStocks.move(fromOffsets: source, toOffset: destination)
+    func movePortfolioStock(from source: IndexSet, to destination: Int) {
+        portfolioStocks.move(fromOffsets: source, toOffset: destination)
     }
+    
+    func deleteFavoriteStock(at offsets: IndexSet) {
+        favoriteStocks.remove(atOffsets: offsets)
+    }
+    
+    func moveFavoriteStock(from source: IndexSet, to destination: Int) {
+        favoriteStocks.move(fromOffsets: source, toOffset: destination)
+    }
+
     
     func currentDateString() -> String {
         let formatter = DateFormatter()
@@ -76,7 +93,7 @@ struct ContentView: View {
     }
 }
 
-struct PortfolioRow: View {
+struct PortfolioAccountRow: View {
     var label: String
     var value: String
     
@@ -91,7 +108,7 @@ struct PortfolioRow: View {
     }
 }
 
-struct StockRow: View {
+struct StockDetailsHomeRow: View {
     var stock: Stock
     
     var body: some View {
@@ -127,21 +144,6 @@ struct Stock: Identifiable {
     let isPositive: Bool
 }
 
-// Sample data
-let portfolioStocks = [
-    Stock(symbol: "AAPL", companyName: "3 shares", price: "$514.31", change: "$0.62 (0.12%)", isPositive: true),
-    Stock(symbol: "NVDA", companyName: "3 shares", price: "$2748.16", change: "$9.10 (0.33%)", isPositive: true)
-]
-
-let favoriteStocks = [
-    Stock(symbol: "AAPL", companyName: "Apple Inc", price: "$171.44", change: "-$7.23 (-4.05%)", isPositive: false),
-    Stock(symbol: "NVDA", companyName: "NVIDIA Corp", price: "$916.05", change: "$12.33 (1.36%)", isPositive: true)
-]
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+#Preview {
+    ContentView()
 }
-
-

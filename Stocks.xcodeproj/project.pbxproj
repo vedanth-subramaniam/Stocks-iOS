@@ -94,8 +94,9 @@
 		0C1A9C1E2BCB97CB00B8E98D /* Stocks */ = {
 			isa = PBXGroup;
 			children = (
+				0CBD5F302BD4AF0F00B7A256 /* Model */,
+				0CBD5F2E2BD4AEC300B7A256 /* Views */,
 				0C1A9C1F2BCB97CB00B8E98D /* StocksApp.swift */,
-				0C1A9C212BCB97CB00B8E98D /* ContentView.swift */,
 				0C1A9C232BCB97CC00B8E98D /* Assets.xcassets */,
 				0C1A9C252BCB97CC00B8E98D /* Preview Content */,
 			);
@@ -125,6 +126,21 @@
 				0C1A9C3C2BCB97CC00B8E98D /* StocksUITestsLaunchTests.swift */,
 			);
 			path = StocksUITests;
+			sourceTree = "<group>";
+		};
+		0CBD5F2E2BD4AEC300B7A256 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0C1A9C212BCB97CB00B8E98D /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0CBD5F302BD4AF0F00B7A256 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
