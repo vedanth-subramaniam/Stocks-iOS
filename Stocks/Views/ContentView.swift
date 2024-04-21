@@ -1,4 +1,5 @@
 import SwiftUI
+import Alamofire
 
 struct ContentView: View {
     @State private var searchText: String = ""
@@ -6,7 +7,7 @@ struct ContentView: View {
         Stock(symbol: "AAPL", companyName: "3 shares", price: "$514.31", change: "$0.62 (0.12%)", isPositive: true),
         Stock(symbol: "NVDA", companyName: "3 shares", price: "$2748.16", change: "$9.10 (0.33%)", isPositive: true)
     ]
-
+    
     @State private var favoriteStocks = [
         Stock(symbol: "AAPL", companyName: "Apple Inc", price: "$171.44", change: "-$7.23 (-4.05%)", isPositive: false),
         Stock(symbol: "NVDA", companyName: "NVIDIA Corp", price: "$916.05", change: "$12.33 (1.36%)", isPositive: true)
@@ -31,9 +32,12 @@ struct ContentView: View {
                         Spacer()
                         PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
                     }
-                    
                     ForEach(portfolioStocks) { stock in
-                        StockDetailsHomeRow(stock: stock)
+                        NavigationLink{
+                            StockDetailsHomeRow(stock: stock)
+                        } label: {
+                            StockDetailsHomeRow(stock: stock)
+                        }
                     }
                     .onDelete(perform: deletePortfolioStock(at:))
                     .onMove(perform: movePortfolioStock(from:to:))
@@ -41,7 +45,11 @@ struct ContentView: View {
                 
                 Section(header: Text("FAVORITES").bold().font(.subheadline)) {
                     ForEach(favoriteStocks) { stock in
-                        StockDetailsHomeRow(stock: stock)
+                        NavigationLink{
+                            StockDetailsHomeRow(stock: stock)
+                        } label: {
+                            StockDetailsHomeRow(stock: stock)
+                        }
                     }.onDelete(perform: deleteFavoriteStock(at:))
                         .onMove(perform: moveFavoriteStock(from:to:))
                 }
@@ -50,6 +58,7 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                         Button(action: {
+                            fetchAPIData()
                             if let url = URL(string: "https://www.finnhub.io") {
                                 UIApplication.shared.open(url)
                             }
@@ -84,7 +93,7 @@ struct ContentView: View {
     func moveFavoriteStock(from source: IndexSet, to destination: Int) {
         favoriteStocks.move(fromOffsets: source, toOffset: destination)
     }
-
+    
     
     func currentDateString() -> String {
         let formatter = DateFormatter()
