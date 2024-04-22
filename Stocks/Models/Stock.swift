@@ -26,6 +26,7 @@ struct Stock: Identifiable, Decodable {
 }
 
 struct StockAutocomplete: Codable {
+    var id: String?
     var description: String
     var displaySymbol: String
     var symbol: String

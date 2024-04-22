@@ -3,73 +3,76 @@ import Alamofire
 
 struct ContentView: View {
     @State private var searchText: String = ""
+    @State private var searchThrottleTimer: Timer?
+    @State private var autocompleteResults: [StockAutocomplete] = []
     @StateObject var portfolioViewModel = PortfolioViewModel()
     @StateObject var favoritesViewModel = FavoritesViewModel()
     
     var body: some View {
-        
         NavigationView {
             List {
-                
-                Section(){
-                    HStack() {
-                        Text(currentDateString())
-                            .fontWeight(.ultraLight)
-                            .font(.title2)
-                    }
-                    .listRowBackground(Color.white)
-                }
-                
-                Section(header: Text("PORTFOLIO").bold().font(.subheadline)) {
-                    HStack{
-                        PortfolioAccountRow(label: "Net Worth", value: "$25009.72")
-                        Spacer()
-                        PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
-                    }
-                    ForEach(portfolioViewModel.portfolioStocks) { stock in
-                        NavigationLink{
-                            StockDetailsHomeRow(stock: stock)
-                        } label: {
-                            StockDetailsHomeRow(stock: stock)
+                if searchText.isEmpty {
+                    
+                    Section(){
+                        HStack() {
+                            Text(currentDateString())
+                                .fontWeight(.ultraLight)
+                                .font(.title2)
                         }
+                        .listRowBackground(Color.white)
                     }
-                    .onDelete(perform: deletePortfolioStock(at:))
-                    .onMove(perform: movePortfolioStock(from:to:))
-                }
-                
-                Section(header: Text("FAVORITES").bold().font(.subheadline)) {
-                    ForEach(favoritesViewModel.favoriteStocks) { stock in
-                        NavigationLink{
-                            StockDetailsHomeRow(stock: stock)
-                        } label: {
-                            StockDetailsHomeRow(stock: stock)
+                    
+                    Section(header: Text("PORTFOLIO").bold().font(.subheadline)) {
+                        HStack{
+                            PortfolioAccountRow(label: "Net Worth", value: "$25009.72")
+                            Spacer()
+                            PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
                         }
-                    }.onDelete(perform: deleteFavoriteStock(at:))
-                        .onMove(perform: moveFavoriteStock(from:to:))
-                }
-                
-                Section {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            if let url = URL(string: "https://www.finnhub.io") {
-                                UIApplication.shared.open(url)
+                        ForEach(portfolioViewModel.portfolioStocks) { stock in
+                            NavigationLink(destination: StockDetailsHomeRow(stock: stock)) {
+                                StockDetailsHomeRow(stock: stock)
                             }
-                        }) {
-                            Text("Powered by Finnhub.io")
-                                .foregroundColor(Color.gray)
-                                .font(.subheadline)
-                            
                         }
-                        Spacer()
+                        .onDelete(perform: deletePortfolioStock)
+                        .onMove(perform: movePortfolioStock)
+                    }
+                    
+                    Section(header: Text("FAVORITES").bold().font(.subheadline)) {
+                        ForEach(favoritesViewModel.favoriteStocks) { stock in
+                            NavigationLink(destination: StockDetailsHomeRow(stock: stock)) {
+                                StockDetailsHomeRow(stock: stock)
+                            }
+                        }
+                        .onDelete(perform: deleteFavoriteStock)
+                        .onMove(perform: moveFavoriteStock)
+                    }
+                } else {
+                    ForEach(autocompleteResults, id: \.symbol) { result in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(result.symbol)
+                                    .font(.headline)
+                                Text(result.description)
+                                    .font(.subheadline)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }
                     }
                 }
             }
-            .navigationBarTitle("Stocks", displayMode: .automatic)
-            .navigationBarItems(trailing: EditButton())
-            .searchable(text: $searchText)
-            .onChange(of: searchText){ newValue in
-                performSearch(query: newValue)
+            .navigationBarTitle(searchText.isEmpty ? "Stocks" : "")
+            .navigationBarItems(trailing: searchText.isEmpty ? EditButton() : nil)
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .onChange(of: searchText) { newValue in
+                if newValue.isEmpty {
+                    autocompleteResults = []
+                } else {
+                    searchThrottleTimer?.invalidate()
+                    searchThrottleTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                        performSearch(query: newValue)
+                    }
+                }
             }
             .onAppear(){
                 portfolioViewModel.fetchPortfolioData()
@@ -77,6 +80,7 @@ struct ContentView: View {
             }
         }
     }
+    
     
     func deletePortfolioStock(at offsets: IndexSet) {
         portfolioViewModel.portfolioStocks.remove(atOffsets: offsets)
@@ -95,24 +99,17 @@ struct ContentView: View {
     }
     
     func performSearch(query: String) {
-        if query.isEmpty {
-            autocompleteResults = []
-        } else {
-            ApiService.shared.fetchAutocompleteData(query: query) { results, error in
+        ApiService.shared.fetchAutocompleteData(query: query) { results, error in
+            DispatchQueue.main.async {
                 if let results = results {
-                    DispatchQueue.main.async {
-                        self.autocompleteResults = results
-                    }
-                } else if let error = error {
-                    print("Error fetching data: \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        self.autocompleteResults = []
-                    }
+                    self.autocompleteResults = results
+                } else {
+                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                    self.autocompleteResults = []
                 }
             }
         }
     }
-    
     
     func currentDateString() -> String {
         let formatter = DateFormatter()
@@ -121,12 +118,13 @@ struct ContentView: View {
     }
 }
 
+
 struct PortfolioAccountRow: View {
     var label: String
     var value: String
     
     var body: some View {
-        VStack(alignment: .leading){
+        VStack(alignment: .leading) {
             Text(label)
                 .font(.title2)
             Text(value)
@@ -163,7 +161,6 @@ struct StockDetailsHomeRow: View {
     }
 }
 
-
-#Preview {
+#Preview{
     ContentView()
 }
