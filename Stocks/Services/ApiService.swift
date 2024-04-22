@@ -6,6 +6,18 @@ class ApiService {
     
     private let baseURL = "http://localhost:8080"
     
+    func fetchAutocompleteData(query: String, completion: @escaping([StockAutocomplete]?, Error?) -> Void) {
+        let endpoint = "/autoComplete/\(query)"
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: [StockAutocomplete].self) { response in
+            switch response.result {
+            case .success(let stockAutocomplete):
+                completion(stockAutocomplete, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
     func fetchPortfolioData(completion: @escaping ([Stock]?, Error?) -> Void) {
         AF.request("\(baseURL)/getAllPortfolioData").responseDecodable(of: [Stock].self) { response in
             switch response.result {

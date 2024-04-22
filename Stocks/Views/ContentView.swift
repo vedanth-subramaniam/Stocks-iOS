@@ -68,6 +68,9 @@ struct ContentView: View {
             .navigationBarTitle("Stocks", displayMode: .automatic)
             .navigationBarItems(trailing: EditButton())
             .searchable(text: $searchText)
+            .onChange(of: searchText){ newValue in
+                performSearch(query: newValue)
+            }
             .onAppear(){
                 portfolioViewModel.fetchPortfolioData()
                 favoritesViewModel.fetchFavoriteStocks()
@@ -89,6 +92,25 @@ struct ContentView: View {
     
     func moveFavoriteStock(from source: IndexSet, to destination: Int) {
         favoritesViewModel.favoriteStocks.move(fromOffsets: source, toOffset: destination)
+    }
+    
+    func performSearch(query: String) {
+        if query.isEmpty {
+            autocompleteResults = []
+        } else {
+            ApiService.shared.fetchAutocompleteData(query: query) { results, error in
+                if let results = results {
+                    DispatchQueue.main.async {
+                        self.autocompleteResults = results
+                    }
+                } else if let error = error {
+                    print("Error fetching data: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self.autocompleteResults = []
+                    }
+                }
+            }
+        }
     }
     
     

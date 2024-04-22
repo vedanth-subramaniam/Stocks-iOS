@@ -25,3 +25,18 @@ struct Stock: Identifiable, Decodable {
     }
 }
 
+struct StockAutocomplete: Codable {
+    var description: String
+    var displaySymbol: String
+    var symbol: String
+    var type: String
+    var primary: [String]?
+
+    enum CodingKeys: String, CodingKey {
+        case description
+        case displaySymbol
+        case symbol
+        case type
+        case primary
+    }
+}
