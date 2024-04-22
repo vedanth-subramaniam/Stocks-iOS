@@ -3,15 +3,9 @@ import Alamofire
 
 struct ContentView: View {
     @State private var searchText: String = ""
-    @State private var portfolioStocks = [
-        Stock(symbol: "AAPL", companyName: "3 shares", price: "$514.31", change: "$0.62 (0.12%)", isPositive: true),
-        Stock(symbol: "NVDA", companyName: "3 shares", price: "$2748.16", change: "$9.10 (0.33%)", isPositive: true)
-    ]
+    @StateObject var portfolioViewModel = PortfolioViewModel()
+    @StateObject var favoritesViewModel = FavoritesViewModel()
     
-    @State private var favoriteStocks = [
-        Stock(symbol: "AAPL", companyName: "Apple Inc", price: "$171.44", change: "-$7.23 (-4.05%)", isPositive: false),
-        Stock(symbol: "NVDA", companyName: "NVIDIA Corp", price: "$916.05", change: "$12.33 (1.36%)", isPositive: true)
-    ]
     var body: some View {
         
         NavigationView {
@@ -32,7 +26,7 @@ struct ContentView: View {
                         Spacer()
                         PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
                     }
-                    ForEach(portfolioStocks) { stock in
+                    ForEach(portfolioViewModel.portfolioStocks) { stock in
                         NavigationLink{
                             StockDetailsHomeRow(stock: stock)
                         } label: {
@@ -44,7 +38,7 @@ struct ContentView: View {
                 }
                 
                 Section(header: Text("FAVORITES").bold().font(.subheadline)) {
-                    ForEach(favoriteStocks) { stock in
+                    ForEach(favoritesViewModel.favoriteStocks) { stock in
                         NavigationLink{
                             StockDetailsHomeRow(stock: stock)
                         } label: {
@@ -58,7 +52,6 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            fetchAPIData()
                             if let url = URL(string: "https://www.finnhub.io") {
                                 UIApplication.shared.open(url)
                             }
@@ -75,23 +68,27 @@ struct ContentView: View {
             .navigationBarTitle("Stocks", displayMode: .automatic)
             .navigationBarItems(trailing: EditButton())
             .searchable(text: $searchText)
+            .onAppear(){
+                portfolioViewModel.fetchPortfolioData()
+                favoritesViewModel.fetchFavoriteStocks()
+            }
         }
     }
     
     func deletePortfolioStock(at offsets: IndexSet) {
-        portfolioStocks.remove(atOffsets: offsets)
+        portfolioViewModel.portfolioStocks.remove(atOffsets: offsets)
     }
     
     func movePortfolioStock(from source: IndexSet, to destination: Int) {
-        portfolioStocks.move(fromOffsets: source, toOffset: destination)
+        portfolioViewModel.portfolioStocks.move(fromOffsets: source, toOffset: destination)
     }
     
     func deleteFavoriteStock(at offsets: IndexSet) {
-        favoriteStocks.remove(atOffsets: offsets)
+        favoritesViewModel.favoriteStocks.remove(atOffsets: offsets)
     }
     
     func moveFavoriteStock(from source: IndexSet, to destination: Int) {
-        favoriteStocks.move(fromOffsets: source, toOffset: destination)
+        favoritesViewModel.favoriteStocks.move(fromOffsets: source, toOffset: destination)
     }
     
     
@@ -144,14 +141,6 @@ struct StockDetailsHomeRow: View {
     }
 }
 
-struct Stock: Identifiable {
-    let id = UUID()
-    let symbol: String
-    let companyName: String
-    let price: String
-    let change: String
-    let isPositive: Bool
-}
 
 #Preview {
     ContentView()
