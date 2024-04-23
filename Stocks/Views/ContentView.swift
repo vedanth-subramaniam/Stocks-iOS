@@ -29,7 +29,7 @@ struct ContentView: View {
                             PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
                         }
                         ForEach(portfolioViewModel.portfolioStocks) { stock in
-                            NavigationLink(destination: StockDetailsHomeRow(stock: stock)) {
+                            NavigationLink(destination: StockDetailsView(stock: StockName(symbol: stock.symbol, companyName: stock.companyName))) {
                                 StockDetailsHomeRow(stock: stock)
                             }
                         }
@@ -39,7 +39,7 @@ struct ContentView: View {
                     
                     Section(header: Text("FAVORITES").bold().font(.subheadline)) {
                         ForEach(favoritesViewModel.favoriteStocks) { stock in
-                            NavigationLink(destination: StockDetailsHomeRow(stock: stock)) {
+                            NavigationLink(destination: StockDetailsView(stock: StockName(symbol: stock.symbol, companyName: stock.companyName))) {
                                 StockDetailsHomeRow(stock: stock)
                             }
                         }
@@ -49,14 +49,15 @@ struct ContentView: View {
                 } else {
                     ForEach(autocompleteResults, id: \.symbol) { result in
                         HStack {
-                            VStack(alignment: .leading) {
-                                Text(result.symbol)
-                                    .font(.headline)
-                                Text(result.description)
-                                    .font(.subheadline)
+                            NavigationLink(destination: StockDetailsView(stock: StockName(symbol: result.displaySymbol, companyName: result.description))){
+                                VStack(alignment: .leading) {
+                                    Text(result.symbol)
+                                        .font(.headline)
+                                    Text(result.description)
+                                        .font(.subheadline)
+                                }
+                                Spacer()
                             }
-                            Spacer()
-                            Image(systemName: "chevron.right")
                         }
                     }
                 }

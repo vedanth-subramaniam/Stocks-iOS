@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StockDetailsView: View {
     // Dummy data for demonstration purposes
+    var stock: StockName
     let stockPrice: Double = 171.09
     let priceChange: Double = -7.58
     let percentageChange: Double = -4.24
@@ -19,15 +20,15 @@ struct StockDetailsView: View {
                 VStack(alignment: .leading) {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("AAPL")
+                            Text(stock.symbol)
                                 .font(.largeTitle)
                                 .bold()
-                            Text("Apple Inc")
+                            Text(stock.companyName)
                                 .font(.caption)
                         }
                         Spacer()
                         VStack(alignment: .trailing) {
-                            Text(String(format: "$%.2f", stockPrice))
+                            Text(String(format: "$%.2f", priceChange))
                                 .font(.largeTitle)
                                 .bold()
                             HStack(spacing: 2) {
@@ -100,5 +101,5 @@ struct PortfolioView: View {
 }
 
 #Preview {
-    StockDetailsView()
+    StockDetailsView(stock: StockName(symbol: "AAPL", companyName: "Apple Inc"))
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 struct Stock: Identifiable, Decodable {
-    var id: String
+    var id: String?
     var symbol: String
     var companyName: String
     var price: String
@@ -23,6 +23,11 @@ struct Stock: Identifiable, Decodable {
         case change
         case isPositive
     }
+}
+
+struct StockName {
+    var symbol: String
+    var companyName: String
 }
 
 struct StockAutocomplete: Codable {
