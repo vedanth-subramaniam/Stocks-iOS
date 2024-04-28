@@ -7,7 +7,7 @@
 import Foundation
 
 // Define the root of the JSON response
-struct StockSummaryAPIResponse: Codable {
+struct StockSummaryResponse: Codable {
     let stockProfile: StockProfile
     let latestPrice: LatestPrice
     let companyPeers: [String]

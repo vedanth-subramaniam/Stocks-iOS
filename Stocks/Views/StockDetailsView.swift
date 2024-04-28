@@ -10,8 +10,9 @@ import SwiftUI
 struct StockDetailsView: View {
     
     var stock: StockTicker
-    @State private var stockSummaryDetails: StockSummaryAPIResponse?
+    @State private var stockSummaryResponse: StockSummaryResponse?
     @State private var stockInsightsResponse: StockInsightsResponse?
+    @State private var stockNewsReponse: [NewsArticle]?
     var body: some View {
         NavigationView {
             ScrollView {
@@ -20,19 +21,19 @@ struct StockDetailsView: View {
                         .font(.title2)
                         .bold()
                     
-                    Text(stockSummaryDetails?.stockProfile.name ?? "Apple")
+                    Text(stockSummaryResponse?.stockProfile.name ?? "Apple")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
                     HStack() {
-                        Text(String(format: "$%.2f", stockSummaryDetails?.latestPrice.c ?? 0))
+                        Text(String(format: "$%.2f", stockSummaryResponse?.latestPrice.c ?? 0))
                             .font(.largeTitle)
                             .bold()
                         HStack(spacing: 2) {
-                            Text(String(format: "$%.2f", stockSummaryDetails?.latestPrice.dp ?? 0))
-                            Text(String(format: "(%.2f%%)", stockSummaryDetails?.latestPrice.pc ?? 0))
+                            Text(String(format: "$%.2f", stockSummaryResponse?.latestPrice.dp ?? 0))
+                            Text(String(format: "(%.2f%%)", stockSummaryResponse?.latestPrice.pc ?? 0))
                         }
-                        .foregroundColor(stockSummaryDetails?.latestPrice.pc ?? 0 < 0 ? .red : .green)
+                        .foregroundColor(stockSummaryResponse?.latestPrice.pc ?? 0 < 0 ? .red : .green)
                     }
                 }
 
@@ -46,6 +47,7 @@ struct StockDetailsView: View {
         .onAppear() {
             fetchSummaryDetails()
             fetchCompanyInsights()
+            fetchNewsDetails()
         }
     }
     
@@ -53,7 +55,7 @@ struct StockDetailsView: View {
         ApiService.shared.fetchStockData(symbol: stock.symbol) { results, error in
             DispatchQueue.main.async {
                 if let results = results {
-                    self.stockSummaryDetails = results
+                    self.stockSummaryResponse = results
                 } else {
                     print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
                 }
@@ -73,17 +75,17 @@ struct StockDetailsView: View {
         }
     }
     
-//    func fetchNewsDetails(){
-//        ApiService.shared.fetchStockData(query: stock.symbol) { results, error in
-//            DispatchQueue.main.async {
-//                if let results = results {
-//                    self.stockSummaryDetails = results
-//                } else {
-//                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
-//                }
-//            }
-//        }
-//    }
+    func fetchNewsDetails(){
+        ApiService.shared.fetchNewsData(symbol: stock.symbol) { results, error in
+            DispatchQueue.main.async {
+                if let results = results {
+                    self.stockNewsReponse = results
+                } else {
+                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
+    }
 //    
 //    func fetchCharts(){
 //        ApiService.shared.fetchStockData(query: stock.symbol) { results, error in
@@ -154,6 +156,6 @@ struct PortfolioView: View {
     }
 }
 
-#Preview {
-    StockDetailsView(stock: StockTicker(symbol: "TSLA"))
-}
+//#Preview {
+//    StockDetailsView(stock: StockTicker(symbol: "TSLA"))
+//}
