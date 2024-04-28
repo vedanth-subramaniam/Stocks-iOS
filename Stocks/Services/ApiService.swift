@@ -18,8 +18,8 @@ class ApiService {
         }
     }
     
-    func fetchPortfolioData(completion: @escaping ([Stock]?, Error?) -> Void) {
-        AF.request("\(baseURL)/getAllPortfolioData").responseDecodable(of: [Stock].self) { response in
+    func fetchPortfolioData(completion: @escaping ([StockPortfolio]?, Error?) -> Void) {
+        AF.request("\(baseURL)/getAllPortfolioData").responseDecodable(of: [StockPortfolio].self) { response in
             switch response.result {
             case .success(let stocks):
                 completion(stocks, nil)
@@ -29,8 +29,8 @@ class ApiService {
         }
     }
     
-    func fetchFavoriteStocks(completion: @escaping ([Stock]?, Error?) -> Void) {
-        AF.request("\(baseURL)/getAllStocks").responseDecodable(of: [Stock].self) { response in
+    func fetchFavoriteStocks(completion: @escaping ([StockPortfolio]?, Error?) -> Void) {
+        AF.request("\(baseURL)/getAllStocks").responseDecodable(of: [StockPortfolio].self) { response in
             switch response.result {
             case .success(let favouriteStocks):
                 completion(favouriteStocks, nil)
@@ -70,6 +70,30 @@ class ApiService {
             switch response.result {
             case .success(let newsArticles):
                 completion(newsArticles, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func fetchChartsData(symbol: String, completion: @escaping ([StockChartsResponse]?, Error?) -> Void) {
+        let endpoint = "/charts/\(symbol)"
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: [StockChartsResponse].self) { response in
+            switch response.result {
+            case .success(let chartsData):
+                completion(chartsData, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func fetchHourlyChartsData(symbol: String, completion: @escaping ([StockHourlyChartsResponse]?, Error?) -> Void) {
+        let endpoint = "/chartsHourly/\(symbol)"
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: [StockHourlyChartsResponse].self) { response in
+            switch response.result {
+            case .success(let chartsData):
+                completion(chartsData, nil)
             case .failure(let error):
                 completion(nil, error)
             }

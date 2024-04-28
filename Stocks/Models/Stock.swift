@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Stock: Identifiable, Decodable {
+struct StockPortfolio: Identifiable, Decodable {
     var id: String?
     var symbol: String
     var companyName: String
@@ -25,7 +25,7 @@ struct Stock: Identifiable, Decodable {
     }
 }
 
-struct StockTicker {
+struct StockTicker: Codable {
     var symbol: String
 }
 

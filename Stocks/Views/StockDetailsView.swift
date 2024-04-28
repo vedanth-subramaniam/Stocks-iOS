@@ -10,9 +10,13 @@ import SwiftUI
 struct StockDetailsView: View {
     
     var stock: StockTicker
+    
     @State private var stockSummaryResponse: StockSummaryResponse?
     @State private var stockInsightsResponse: StockInsightsResponse?
     @State private var stockNewsReponse: [NewsArticle]?
+    @State private var stockChartsResponse: [StockChartsResponse]?
+    @State private var stockHourlyChartsResponse: [StockHourlyChartsResponse]?
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -48,6 +52,8 @@ struct StockDetailsView: View {
             fetchSummaryDetails()
             fetchCompanyInsights()
             fetchNewsDetails()
+            fetchCharts()
+            fetchHourlyCharts()
         }
     }
     
@@ -57,7 +63,7 @@ struct StockDetailsView: View {
                 if let results = results {
                     self.stockSummaryResponse = results
                 } else {
-                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                    print("Error fetching stock summary data: \(error?.localizedDescription ?? "Unknown error")")
                 }
             }
         }
@@ -69,7 +75,7 @@ struct StockDetailsView: View {
                 if let results = results {
                     self.stockInsightsResponse = results
                 } else {
-                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                    print("Error fetching company insights data: \(error?.localizedDescription ?? "Unknown error")")
                 }
             }
         }
@@ -81,35 +87,37 @@ struct StockDetailsView: View {
                 if let results = results {
                     self.stockNewsReponse = results
                 } else {
-                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                    print("Error fetching news data: \(error?.localizedDescription ?? "Unknown error")")
                 }
             }
         }
     }
-//    
-//    func fetchCharts(){
-//        ApiService.shared.fetchStockData(query: stock.symbol) { results, error in
-//            DispatchQueue.main.async {
-//                if let results = results {
-//                    self.stockSummaryDetails = results
-//                } else {
-//                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
-//                }
-//            }
-//        }
-//    }
-//    
-//    func fetchChartsHourly(){
-//        ApiService.shared.fetchStockData(query: stock.symbol) { results, error in
-//            DispatchQueue.main.async {
-//                if let results = results {
-//                    self.stockSummaryDetails = results
-//                } else {
-//                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
-//                }
-//            }
-//        }
-//    }
+    
+    func fetchCharts(){
+        print("Charts")
+        ApiService.shared.fetchChartsData(symbol: stock.symbol) { results, error in
+            DispatchQueue.main.async {
+                if let results = results {
+                    self.stockChartsResponse = results
+                } else {
+                    print("Error fetching charts history data: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
+    }
+    
+    func fetchHourlyCharts(){
+        print("Hourly")
+        ApiService.shared.fetchHourlyChartsData(symbol: stock.symbol) { results, error in
+            DispatchQueue.main.async {
+                if let results = results {
+                    self.stockHourlyChartsResponse = results
+                } else {
+                    print("Error fetching hourly charts data: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
+    }
 }
 
 struct ChartPlaceholderView: View {

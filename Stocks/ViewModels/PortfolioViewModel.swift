@@ -8,7 +8,7 @@
 import Foundation
 
 class PortfolioViewModel: ObservableObject {
-    @Published var portfolioStocks: [Stock] = []
+    @Published var portfolioStocks: [StockPortfolio] = []
     
     func fetchPortfolioData() {
         ApiService.shared.fetchPortfolioData { [weak self] stocks, error in

@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var searchText: String = ""
     @State private var searchThrottleTimer: Timer?
     @State private var autocompleteResults: [StockAutocomplete] = []
+    @State var walletBalance: Int?
     @StateObject var portfolioViewModel = PortfolioViewModel()
     @StateObject var favoritesViewModel = FavoritesViewModel()
     
@@ -78,6 +79,7 @@ struct ContentView: View {
             .onAppear(){
                 portfolioViewModel.fetchPortfolioData()
                 favoritesViewModel.fetchFavoriteStocks()
+//                fetchWalletBalance()
             }
         }
     }
@@ -136,7 +138,7 @@ struct PortfolioAccountRow: View {
 }
 
 struct StockDetailsHomeRow: View {
-    var stock: Stock
+    var stock: StockPortfolio
     
     var body: some View {
         HStack {
@@ -162,6 +164,6 @@ struct StockDetailsHomeRow: View {
     }
 }
 
-#Preview{
+#Preview {
     ContentView()
 }

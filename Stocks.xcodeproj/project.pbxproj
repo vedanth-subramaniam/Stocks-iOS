@@ -23,6 +23,7 @@
 		0CBD5F422BD4D3CA00B7A256 /* StockDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD5F412BD4D3CA00B7A256 /* StockDetailsView.swift */; };
 		0CBEC73C2BDDF85A00CE8F36 /* StockInsightsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBEC73B2BDDF85A00CE8F36 /* StockInsightsModel.swift */; };
 		0CBEC7402BDDFCC900CE8F36 /* StockNewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBEC73F2BDDFCC900CE8F36 /* StockNewsModel.swift */; };
+		0CCF9DE82BDEF5B90016208C /* StockChartsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCF9DE72BDEF5B90016208C /* StockChartsModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		0CBD5F412BD4D3CA00B7A256 /* StockDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailsView.swift; sourceTree = "<group>"; };
 		0CBEC73B2BDDF85A00CE8F36 /* StockInsightsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInsightsModel.swift; sourceTree = "<group>"; };
 		0CBEC73F2BDDFCC900CE8F36 /* StockNewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockNewsModel.swift; sourceTree = "<group>"; };
+		0CCF9DE72BDEF5B90016208C /* StockChartsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockChartsModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +183,7 @@
 				0C39062B2BD74AEC00060EE0 /* StockSummaryModel.swift */,
 				0CBEC73B2BDDF85A00CE8F36 /* StockInsightsModel.swift */,
 				0CBEC73F2BDDFCC900CE8F36 /* StockNewsModel.swift */,
+				0CCF9DE72BDEF5B90016208C /* StockChartsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				0CBD5F402BD4C48500B7A256 /* Stock.swift in Sources */,
 				0CBD5F392BD4C1A400B7A256 /* PortfolioViewModel.swift in Sources */,
 				0C39062C2BD74AEC00060EE0 /* StockSummaryModel.swift in Sources */,
+				0CCF9DE82BDEF5B90016208C /* StockChartsModel.swift in Sources */,
 				0C1A9C202BCB97CB00B8E98D /* StocksApp.swift in Sources */,
 				0CBD5F372BD4BDC200B7A256 /* ApiService.swift in Sources */,
 				0CBEC7402BDDFCC900CE8F36 /* StockNewsModel.swift in Sources */,
