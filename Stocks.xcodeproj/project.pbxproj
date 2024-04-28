@@ -21,6 +21,7 @@
 		0CBD5F3D2BD4C21200B7A256 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD5F3C2BD4C21200B7A256 /* FavoritesViewModel.swift */; };
 		0CBD5F402BD4C48500B7A256 /* Stock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD5F3F2BD4C48500B7A256 /* Stock.swift */; };
 		0CBD5F422BD4D3CA00B7A256 /* StockDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD5F412BD4D3CA00B7A256 /* StockDetailsView.swift */; };
+		0CBEC73C2BDDF85A00CE8F36 /* StockInsightsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBEC73B2BDDF85A00CE8F36 /* StockInsightsModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		0CBD5F3C2BD4C21200B7A256 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		0CBD5F3F2BD4C48500B7A256 /* Stock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stock.swift; sourceTree = "<group>"; };
 		0CBD5F412BD4D3CA00B7A256 /* StockDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailsView.swift; sourceTree = "<group>"; };
+		0CBEC73B2BDDF85A00CE8F36 /* StockInsightsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInsightsModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 			children = (
 				0CBD5F3F2BD4C48500B7A256 /* Stock.swift */,
 				0C39062B2BD74AEC00060EE0 /* StockSummaryModel.swift */,
+				0CBEC73B2BDDF85A00CE8F36 /* StockInsightsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				0CBD5F422BD4D3CA00B7A256 /* StockDetailsView.swift in Sources */,
 				0CBD5F3D2BD4C21200B7A256 /* FavoritesViewModel.swift in Sources */,
 				0C1A9C222BCB97CB00B8E98D /* ContentView.swift in Sources */,
+				0CBEC73C2BDDF85A00CE8F36 /* StockInsightsModel.swift in Sources */,
 				0CBD5F402BD4C48500B7A256 /* Stock.swift in Sources */,
 				0CBD5F392BD4C1A400B7A256 /* PortfolioViewModel.swift in Sources */,
 				0C39062C2BD74AEC00060EE0 /* StockSummaryModel.swift in Sources */,

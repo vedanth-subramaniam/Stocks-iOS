@@ -40,8 +40,8 @@ class ApiService {
         }
     }
     
-    func fetchStockData(query: String, completion: @escaping (StockSummaryAPIResponse?, Error?) -> Void) {
-        let endpoint = "/search/\(query)"
+    func fetchStockData(symbol: String, completion: @escaping (StockSummaryAPIResponse?, Error?) -> Void) {
+        let endpoint = "/search/\(symbol)"
         AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockSummaryAPIResponse.self) { response in
             switch response.result {
             case .success(let stockSummaryApiResponse):
@@ -52,5 +52,15 @@ class ApiService {
         }
     }
     
-    
+    func fetchInsightsData(symbol: String, completion: @escaping (StockInsightsResponse?, Error?) -> Void) {
+        let endpoint = "/insights/\(symbol)"
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockInsightsResponse.self) { response in
+            switch response.result {
+            case .success(let apiResponse):
+                completion(apiResponse, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
 }

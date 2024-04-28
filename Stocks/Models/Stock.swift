@@ -25,9 +25,8 @@ struct Stock: Identifiable, Decodable {
     }
 }
 
-struct StockName {
+struct StockTicker {
     var symbol: String
-    var companyName: String
 }
 
 struct StockAutocomplete: Codable {
@@ -46,3 +45,5 @@ struct StockAutocomplete: Codable {
         case primary
     }
 }
+
+

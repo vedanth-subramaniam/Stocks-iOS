@@ -29,7 +29,7 @@ struct ContentView: View {
                             PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
                         }
                         ForEach(portfolioViewModel.portfolioStocks) { stock in
-                            NavigationLink(destination: StockDetailsView(stock: StockName(symbol: stock.symbol, companyName: stock.companyName))) {
+                            NavigationLink(destination: StockDetailsView(stock: StockTicker(symbol: stock.symbol))) {
                                 StockDetailsHomeRow(stock: stock)
                             }
                         }
@@ -39,7 +39,7 @@ struct ContentView: View {
                     
                     Section(header: Text("FAVORITES").bold().font(.subheadline)) {
                         ForEach(favoritesViewModel.favoriteStocks) { stock in
-                            NavigationLink(destination: StockDetailsView(stock: StockName(symbol: stock.symbol, companyName: stock.companyName))) {
+                            NavigationLink(destination: StockDetailsView(stock: StockTicker(symbol: stock.symbol))) {
                                 StockDetailsHomeRow(stock: stock)
                             }
                         }
@@ -49,7 +49,7 @@ struct ContentView: View {
                 } else {
                     ForEach(autocompleteResults, id: \.symbol) { result in
                         HStack {
-                            NavigationLink(destination: StockDetailsView(stock: StockName(symbol: result.displaySymbol, companyName: result.description))){
+                            NavigationLink(destination: StockDetailsView(stock: StockTicker(symbol: result.displaySymbol))){
                                 VStack(alignment: .leading) {
                                     Text(result.symbol)
                                         .font(.headline)

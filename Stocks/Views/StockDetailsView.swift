@@ -8,56 +8,110 @@
 import SwiftUI
 
 struct StockDetailsView: View {
-    // Dummy data for demonstration purposes
-    var stock: StockName
-    let stockPrice: Double = 171.09
-    let priceChange: Double = -7.58
-    let percentageChange: Double = -4.24
     
+    var stock: StockTicker
+    @State private var stockSummaryDetails: StockSummaryAPIResponse?
+    @State private var stockInsightsResponse: StockInsightsResponse?
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(alignment: .leading) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(stock.symbol)
-                                .font(.largeTitle)
-                                .bold()
-                            Text(stock.companyName)
-                                .font(.caption)
+                VStack(alignment: .leading){
+                    Text(stock.symbol)
+                        .font(.title2)
+                        .bold()
+                    
+                    Text(stockSummaryDetails?.stockProfile.name ?? "Apple")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    
+                    HStack() {
+                        Text(String(format: "$%.2f", stockSummaryDetails?.latestPrice.c ?? 0))
+                            .font(.largeTitle)
+                            .bold()
+                        HStack(spacing: 2) {
+                            Text(String(format: "$%.2f", stockSummaryDetails?.latestPrice.dp ?? 0))
+                            Text(String(format: "(%.2f%%)", stockSummaryDetails?.latestPrice.pc ?? 0))
                         }
-                        Spacer()
-                        VStack(alignment: .trailing) {
-                            Text(String(format: "$%.2f", priceChange))
-                                .font(.largeTitle)
-                                .bold()
-                            HStack(spacing: 2) {
-                                Text(String(format: "$%.2f", priceChange))
-                                Text(String(format: "(%.2f%%)", percentageChange))
-                            }
-                            .foregroundColor(priceChange < 0 ? .red : .green)
-                        }
+                        .foregroundColor(stockSummaryDetails?.latestPrice.pc ?? 0 < 0 ? .red : .green)
                     }
-                    .padding()
-                    
-                    // Placeholder for the chart view
-                    ChartPlaceholderView()
-                        .frame(height: 200)
-                        .padding([.top, .horizontal])
-                    
-                    // Portfolio Section
-                    PortfolioView(sharesOwned: 3, averageCost: 171.23)
                 }
+
+                ChartPlaceholderView()
+                    .frame(height: 200)
+                    .padding([.top, .horizontal])
+                
+                PortfolioView(sharesOwned: 3, averageCost: 171.23)
             }
-            .navigationBarTitle("Stocks", displayMode: .inline)
+        }
+        .onAppear() {
+            fetchSummaryDetails()
+            fetchCompanyInsights()
         }
     }
+    
+    func fetchSummaryDetails(){
+        ApiService.shared.fetchStockData(symbol: stock.symbol) { results, error in
+            DispatchQueue.main.async {
+                if let results = results {
+                    self.stockSummaryDetails = results
+                } else {
+                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
+    }
+    
+    func fetchCompanyInsights(){
+        ApiService.shared.fetchInsightsData(symbol: stock.symbol) { results, error in
+            DispatchQueue.main.async {
+                if let results = results {
+                    self.stockInsightsResponse = results
+                } else {
+                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
+    }
+    
+//    func fetchNewsDetails(){
+//        ApiService.shared.fetchStockData(query: stock.symbol) { results, error in
+//            DispatchQueue.main.async {
+//                if let results = results {
+//                    self.stockSummaryDetails = results
+//                } else {
+//                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+//                }
+//            }
+//        }
+//    }
+//    
+//    func fetchCharts(){
+//        ApiService.shared.fetchStockData(query: stock.symbol) { results, error in
+//            DispatchQueue.main.async {
+//                if let results = results {
+//                    self.stockSummaryDetails = results
+//                } else {
+//                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+//                }
+//            }
+//        }
+//    }
+//    
+//    func fetchChartsHourly(){
+//        ApiService.shared.fetchStockData(query: stock.symbol) { results, error in
+//            DispatchQueue.main.async {
+//                if let results = results {
+//                    self.stockSummaryDetails = results
+//                } else {
+//                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+//                }
+//            }
+//        }
+//    }
 }
 
 struct ChartPlaceholderView: View {
     var body: some View {
-        // This would be replaced by the actual charting code
-        // You would use a UIViewRepresentable to wrap your Highcharts view
         Text("Chart View Placeholder")
             .frame(maxWidth: .infinity)
             .background(Color.gray.opacity(0.2))
@@ -101,5 +155,5 @@ struct PortfolioView: View {
 }
 
 #Preview {
-    StockDetailsView(stock: StockName(symbol: "AAPL", companyName: "Apple Inc"))
+    StockDetailsView(stock: StockTicker(symbol: "TSLA"))
 }
