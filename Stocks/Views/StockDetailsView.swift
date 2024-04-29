@@ -4,8 +4,8 @@
 //
 //  Created by Vedanth Subramaniam on 4/20/24.
 //
-
 import SwiftUI
+import Highcharts
 
 struct StockDetailsView: View {
     
@@ -13,55 +13,44 @@ struct StockDetailsView: View {
     
     @State private var stockSummaryResponse: StockSummaryResponse?
     @State private var stockInsightsResponse: StockInsightsResponse?
-    @State private var stockNewsReponse: [NewsArticle]?
+    @State private var stockNewsResponse: [NewsArticle]?
     @State private var stockChartsResponse: [StockChartsResponse]?
     @State private var stockHourlyChartsResponse: [StockHourlyChartsResponse]?
-
+    @State private var isLoading = true
+    
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading){
-                    Text(stock.symbol)
-                        .font(.title2)
-                        .bold()
-                    
-                    Text(stockSummaryResponse?.stockProfile.name ?? "Apple")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    
-                    HStack() {
-                        Text(String(format: "$%.2f", stockSummaryResponse?.latestPrice.c ?? 0))
-                            .font(.largeTitle)
-                            .bold()
-                        HStack(spacing: 2) {
-                            Text(String(format: "$%.2f", stockSummaryResponse?.latestPrice.dp ?? 0))
-                            Text(String(format: "(%.2f%%)", stockSummaryResponse?.latestPrice.pc ?? 0))
-                        }
-                        .foregroundColor(stockSummaryResponse?.latestPrice.pc ?? 0 < 0 ? .red : .green)
+            VStack {
+                if isLoading {
+                    // Display a loading indicator while data is being fetched
+                    ProgressView("Loading...")
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .scaleEffect(1.5)
+                } else {
+                    // Once data is loaded, display these views
+                    ScrollView {
+                        StockBasicDetailsView(stock: stock, stockSummaryResponse: self.stockSummaryResponse)
+                            .frame(height: 200)
+                            .padding([.top, .horizontal])
+                        PortfolioView(sharesOwned: 3, averageCost: 171.23)
                     }
                 }
-
-                ChartPlaceholderView()
-                    .frame(height: 200)
-                    .padding([.top, .horizontal])
-                
-                PortfolioView(sharesOwned: 3, averageCost: 171.23)
             }
+            .navigationBarTitle("Stock Details", displayMode: .inline)
         }
-        .onAppear() {
+        .onAppear {
             fetchSummaryDetails()
             fetchCompanyInsights()
             fetchNewsDetails()
-            fetchCharts()
-            fetchHourlyCharts()
         }
     }
     
-    func fetchSummaryDetails(){
+    func fetchSummaryDetails() {
         ApiService.shared.fetchStockData(symbol: stock.symbol) { results, error in
             DispatchQueue.main.async {
                 if let results = results {
                     self.stockSummaryResponse = results
+                    self.checkIfLoadingShouldStop()
                 } else {
                     print("Error fetching stock summary data: \(error?.localizedDescription ?? "Unknown error")")
                 }
@@ -69,11 +58,12 @@ struct StockDetailsView: View {
         }
     }
     
-    func fetchCompanyInsights(){
+    func fetchCompanyInsights() {
         ApiService.shared.fetchInsightsData(symbol: stock.symbol) { results, error in
             DispatchQueue.main.async {
                 if let results = results {
                     self.stockInsightsResponse = results
+                    self.checkIfLoadingShouldStop()
                 } else {
                     print("Error fetching company insights data: \(error?.localizedDescription ?? "Unknown error")")
                 }
@@ -81,11 +71,12 @@ struct StockDetailsView: View {
         }
     }
     
-    func fetchNewsDetails(){
+    func fetchNewsDetails() {
         ApiService.shared.fetchNewsData(symbol: stock.symbol) { results, error in
             DispatchQueue.main.async {
                 if let results = results {
-                    self.stockNewsReponse = results
+                    self.stockNewsResponse = results
+                    self.checkIfLoadingShouldStop()
                 } else {
                     print("Error fetching news data: \(error?.localizedDescription ?? "Unknown error")")
                 }
@@ -99,6 +90,7 @@ struct StockDetailsView: View {
             DispatchQueue.main.async {
                 if let results = results {
                     self.stockChartsResponse = results
+                    self.checkIfLoadingShouldStop()
                 } else {
                     print("Error fetching charts history data: \(error?.localizedDescription ?? "Unknown error")")
                 }
@@ -112,20 +104,47 @@ struct StockDetailsView: View {
             DispatchQueue.main.async {
                 if let results = results {
                     self.stockHourlyChartsResponse = results
+                    self.checkIfLoadingShouldStop()
                 } else {
                     print("Error fetching hourly charts data: \(error?.localizedDescription ?? "Unknown error")")
                 }
             }
         }
     }
+    
+    func checkIfLoadingShouldStop() {
+        if stockSummaryResponse != nil && stockInsightsResponse != nil && stockNewsResponse != nil {
+            isLoading = false
+        }
+    }
 }
 
-struct ChartPlaceholderView: View {
+struct StockBasicDetailsView: View {
+    var stock: StockTicker
+    var stockSummaryResponse: StockSummaryResponse?
+    
     var body: some View {
-        Text("Chart View Placeholder")
-            .frame(maxWidth: .infinity)
-            .background(Color.gray.opacity(0.2))
-            .cornerRadius(10)
+        VStack(alignment: .leading) {
+            Text(stock.symbol)
+                .font(.title)
+                .bold()
+                .lineSpacing(/*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
+            Text(stockSummaryResponse?.stockProfile.name ?? "Loading Name...")
+                .font(.title3)
+                .foregroundColor(.gray)
+            HStack {
+                Text(String(format: "$%.2f", stockSummaryResponse?.latestPrice.c ?? 0))
+                    .font(.largeTitle)
+                    .bold()
+                Spacer()
+                HStack(spacing: 2) {
+                    Text(String(format: "$%.2f", stockSummaryResponse?.latestPrice.dp ?? 0))
+                    Text(String(format: "(%.2f%%)", stockSummaryResponse?.latestPrice.pc ?? 0))
+                }
+                .foregroundColor((stockSummaryResponse?.latestPrice.pc ?? 0) < 0 ? .red : .green)
+                .font(.title2)
+            }
+        }.padding()
     }
 }
 
@@ -164,6 +183,6 @@ struct PortfolioView: View {
     }
 }
 
-//#Preview {
-//    StockDetailsView(stock: StockTicker(symbol: "TSLA"))
-//}
+#Preview {
+    StockDetailsView(stock: StockTicker(symbol: "TSLA"))
+}

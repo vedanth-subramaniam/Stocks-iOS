@@ -79,7 +79,6 @@ struct ContentView: View {
             .onAppear(){
                 portfolioViewModel.fetchPortfolioData()
                 favoritesViewModel.fetchFavoriteStocks()
-//                fetchWalletBalance()
             }
         }
     }

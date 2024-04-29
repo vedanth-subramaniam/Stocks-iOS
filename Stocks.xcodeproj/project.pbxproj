@@ -24,6 +24,7 @@
 		0CBEC73C2BDDF85A00CE8F36 /* StockInsightsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBEC73B2BDDF85A00CE8F36 /* StockInsightsModel.swift */; };
 		0CBEC7402BDDFCC900CE8F36 /* StockNewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBEC73F2BDDFCC900CE8F36 /* StockNewsModel.swift */; };
 		0CCF9DE82BDEF5B90016208C /* StockChartsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCF9DE72BDEF5B90016208C /* StockChartsModel.swift */; };
+		0CCF9DEB2BDF11E80016208C /* Highcharts in Frameworks */ = {isa = PBXBuildFile; productRef = 0CCF9DEA2BDF11E80016208C /* Highcharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CBD5F332BD4B8DD00B7A256 /* Alamofire in Frameworks */,
+				0CCF9DEB2BDF11E80016208C /* Highcharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +208,7 @@
 			name = Stocks;
 			packageProductDependencies = (
 				0CBD5F322BD4B8DD00B7A256 /* Alamofire */,
+				0CCF9DEA2BDF11E80016208C /* Highcharts */,
 			);
 			productName = Stocks;
 			productReference = 0C1A9C1C2BCB97CB00B8E98D /* Stocks.app */;
@@ -281,6 +284,7 @@
 			mainGroup = 0C1A9C132BCB97CB00B8E98D;
 			packageReferences = (
 				0CBD5F312BD4B8DD00B7A256 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				0CCF9DE92BDF11E80016208C /* XCRemoteSwiftPackageReference "highcharts-ios" */,
 			);
 			productRefGroup = 0C1A9C1D2BCB97CB00B8E98D /* Products */;
 			projectDirPath = "";
@@ -668,6 +672,14 @@
 				minimumVersion = 5.9.1;
 			};
 		};
+		0CCF9DE92BDF11E80016208C /* XCRemoteSwiftPackageReference "highcharts-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/highcharts/highcharts-ios";
+			requirement = {
+				kind = exactVersion;
+				version = 11.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -675,6 +687,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0CBD5F312BD4B8DD00B7A256 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		0CCF9DEA2BDF11E80016208C /* Highcharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0CCF9DE92BDF11E80016208C /* XCRemoteSwiftPackageReference "highcharts-ios" */;
+			productName = Highcharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
