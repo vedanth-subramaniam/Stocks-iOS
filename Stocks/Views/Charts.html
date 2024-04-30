@@ -1,46 +1,121 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/volume-by-price.js"></script>
 </head>
 <body>
-    <div id="container" style="width:100%; height:100%;"></div>
+    <div id="chart-container" style="width: 100%; height: 800px;"></div>
     <script>
-        Highcharts.chart('container', {
-            chart: {
-                type: 'line'
-            },
-            title: {
-                text: 'Monthly Average Temperature'
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com'
-            },
-            xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            },
-            yAxis: {
-                title: {
-                    text: 'Temperature (°C)'
-                }
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true
-                    },
-                    enableMouseTracking: false
-                }
-            },
-            series: [{
-                name: 'Tokyo',
-                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-            }, {
-                name: 'London',
-                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-            }]
-        });
+        function loadChartWithData(tickerSymbol) {
+            const ohlc = [],
+                volume = [],
+                groupingUnits = [
+                    [
+                        "day",
+                        [1]
+                    ],
+                    ["month", [1, 2, 3, 4, 6]]
+                ];
+
+            fetch(`https://csci-571-3550559665.wl.r.appspot.com/get_charts_viz/${tickerSymbol}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.data.chart.forEach(rec => {
+                        ohlc.push([rec.t, rec.o, rec.h, rec.l, rec.c]);
+                        volume.push([rec.t, rec.v]);
+                    });
+
+                    Highcharts.stockChart('chart-container', {
+                        rangeSelector: {
+                            selected: 2
+                        },
+                        title: {
+                            text: `${tickerSymbol} Historical`
+                        },
+                        subtitle: {
+                            text: 'With SMA and Volume by Price technical indicators'
+                        },
+                        yAxis: [{
+                            startOnTick: false,
+                            endOnTick: false,
+                            labels: {
+                                align: 'right',
+                                x: -3
+                            },
+                            title: {
+                                text: 'OHLC'
+                            },
+                            height: '60%',
+                            lineWidth: 2,
+                            resize: {
+                                enabled: true
+                            }
+                        }, {
+                            labels: {
+                                align: 'right',
+                                x: -3
+                            },
+                            title: {
+                                text: 'Volume'
+                            },
+                            top: '65%',
+                            height: '35%',
+                            offset: 0,
+                            lineWidth: 2
+                        }],
+                        tooltip: {
+                            split: true
+                        },
+                        plotOptions: {
+                            series: {
+                                dataGrouping: {
+                                    units: groupingUnits
+                                }
+                            }
+                        },
+                        series: [{
+                            type: 'candlestick',
+                            name: tickerSymbol,
+                            id: 'aapl-ohlc',
+                            zIndex: 2,
+                            data: ohlc
+                        }, {
+                            type: 'column',
+                            name: 'Volume',
+                            id: 'volume',
+                            data: volume,
+                            yAxis: 1
+                        }, {
+                            type: 'vbp',
+                            linkedTo: 'aapl-ohlc',
+                            params: {
+                                volumeSeriesID: 'volume'
+                            },
+                            dataLabels: {
+                                enabled: false
+                            },
+                            zoneLines: {
+                                enabled: false
+                            }
+                        }, {
+                            type: 'sma',
+                            linkedTo: 'aapl-ohlc',
+                            zIndex: 1,
+                            marker: {
+                                enabled: false
+                            }
+                        }]
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
     </script>
 </body>
 </html>

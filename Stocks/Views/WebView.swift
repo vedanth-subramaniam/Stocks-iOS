@@ -1,31 +1,44 @@
-//
-//  WebView.swift
-//  Stocks
-//
-//  Created by Vedanth Subramaniam on 4/29/24.
-//
-
 import SwiftUI
 import WebKit
 
 struct WebView: UIViewRepresentable {
     var htmlFilename: String
+    var ticker: String
 
     func makeUIView(context: Context) -> WKWebView {
-        return WKWebView()
+        let webView = WKWebView()
+        webView.navigationDelegate = context.coordinator
+        return webView
     }
     
     func updateUIView(_ webView: WKWebView, context: Context) {
-        guard let filePath = Bundle.main.path(forResource: htmlFilename, ofType: "html"),
-              let htmlString = try? String(contentsOfFile: filePath, encoding: .utf8) else {
-            print("Unable to read the HTML file.")
-            return
+        if let filePath = Bundle.main.url(forResource: htmlFilename, withExtension: "html") {
+            let request = URLRequest(url: filePath)
+            webView.load(request)
         }
-        webView.loadHTMLString(htmlString, baseURL: Bundle.main.bundleURL)
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, WKNavigationDelegate {
+        var parent: WebView
+
+        init(_ parent: WebView) {
+            self.parent = parent
+        }
+
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            let jsCode = "loadChartWithData('\(self.parent.ticker)');"
+            webView.evaluateJavaScript(jsCode, completionHandler: { (result, error) in
+                if let error = error {
+                    print("JavaScript execution error: \(error.localizedDescription)")
+                }
+            })
+        }
     }
 }
-
-
 #Preview {
-    WebView(htmlFilename: "Charts")
+    WebView(htmlFilename: "Charts", ticker: "TSLA")
 }

@@ -48,6 +48,7 @@ struct ContentView: View {
                         .onDelete(perform: deleteFavoriteStock)
                         .onMove(perform: moveFavoriteStock)
                     }
+                    
                 } else {
                     ForEach(autocompleteResults, id: \.ticker) { result in
                         HStack {

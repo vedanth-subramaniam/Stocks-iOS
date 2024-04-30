@@ -27,23 +27,21 @@ struct StockDetailsView: View {
                         .progressViewStyle(CircularProgressViewStyle())
                         .scaleEffect(1.5)
                 } else {
-                    ScrollView {
+                    ScrollView{
                         StockBasicDetailsView(stock: stock, stockSummaryResponse: self.stockSummaryResponse)
-                            .frame(height: 200)
                             .padding([.top, .horizontal])
+                        WebView(htmlFilename: "Charts", ticker: stock.ticker).onAppear {
+                            print("WebView is appearing with ticker: \(stock.ticker)")
+                        }.frame(height: 320)
                         Text("Portfolio")
                             .font(.largeTitle)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
                         PortfolioView(stock:stock)
                         Section(header: Text("News").bold().font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading)) {
                             ForEach(stockNewsResponse!,  id: \.id) { news in
-                                
                                 NewsArticleRow(article: news)
-                                
                             }
                         }
-                        
                     }
                 }
             }
@@ -224,6 +222,7 @@ struct PortfolioView: View {
         }
     }
 }
+
 struct TradeSheetView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var portfolioViewModel = PortfolioViewModel()
