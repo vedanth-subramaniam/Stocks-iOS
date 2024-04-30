@@ -7,40 +7,53 @@
 
 import Foundation
 
-struct StockPortfolio: Identifiable, Decodable {
-    var id: String?
-    var symbol: String
-    var companyName: String
-    var price: String
-    var change: String
+struct StockPortfolio: Codable {
+    var ticker: String
+    var quantity: Double
+    var totalCost: Double
+    var averagePrice: Double
+    var price: Double
+    var marketValue: Double
+    var changePrice: Double
+    var changePricePercent: String
     var isPositive: Bool
-
-    enum CodingKeys: String, CodingKey {
-        case id = "_id"  // Mapping "_id" from JSON to "id" in Swift
-        case symbol
-        case companyName
-        case price
-        case change
-        case isPositive
-    }
 }
 
+struct StockWishlist: Codable {
+    var ticker: String
+    var companyName: String
+    var price: Double
+    var changePrice: Double
+    var changePricePercent: String
+    var isPositive: Bool
+}
+
+struct StockPortfolioDb: Codable {
+    var ticker: String
+    var quantity: Double
+    var totalCost: Double
+}
+
+struct StockWishlistDb: Codable {
+    var ticker: String
+    var companyName: Double
+}
 struct StockTicker: Codable {
-    var symbol: String
+    var ticker: String
 }
 
 struct StockAutocomplete: Codable {
     var id: String?
     var description: String
     var displaySymbol: String
-    var symbol: String
+    var ticker: String
     var type: String
     var primary: [String]?
 
     enum CodingKeys: String, CodingKey {
         case description
         case displaySymbol
-        case symbol
+        case ticker
         case type
         case primary
     }

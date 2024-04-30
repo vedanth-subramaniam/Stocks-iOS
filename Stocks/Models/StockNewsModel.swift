@@ -9,7 +9,7 @@ import Foundation
 
 struct NewsArticle: Codable {
     var category: String
-    var datetime: Int
+    var datetime: TimeInterval
     var headline: String
     var id: Int
     var image: String
@@ -17,6 +17,15 @@ struct NewsArticle: Codable {
     var source: String
     var summary: String
     var url: String
+    
+    var formattedDateTime: String {
+        let date = Date(timeIntervalSince1970: datetime)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+    
 }
 
 // Define the struct to handle the array of news articles, if neede

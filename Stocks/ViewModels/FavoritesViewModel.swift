@@ -8,7 +8,7 @@
 import Foundation
 
 class FavoritesViewModel: ObservableObject {
-    @Published var favoriteStocks: [StockPortfolio] = []
+    @Published var favoriteStocks: [StockWishlist] = []
     
     func fetchFavoriteStocks() {
         ApiService.shared.fetchFavoriteStocks { [weak self] stocks, error in

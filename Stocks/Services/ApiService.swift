@@ -23,17 +23,34 @@ class ApiService {
             switch response.result {
             case .success(let stocks):
                 completion(stocks, nil)
+                print(stocks)
             case .failure(let error):
                 completion(nil, error)
             }
         }
     }
     
-    func fetchFavoriteStocks(completion: @escaping ([StockPortfolio]?, Error?) -> Void) {
-        AF.request("\(baseURL)/getAllStocks").responseDecodable(of: [StockPortfolio].self) { response in
+    func fetchFavoriteStocks(completion: @escaping ([StockWishlist]?, Error?) -> Void) {
+        AF.request("\(baseURL)/getAllStocksWishlist").responseDecodable(of: [StockWishlist].self) { response in
             switch response.result {
             case .success(let favouriteStocks):
                 completion(favouriteStocks, nil)
+                print(favouriteStocks)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func fetchSinglePortfolioRecord(symbol: String, completion: @escaping (StockPortfolio?, Error?) -> Void) {
+        print("Fetching single portfolio record")
+        let endpoint = "/getPortfolioData/\(symbol)"
+        print(endpoint)
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockPortfolio.self) { response in
+            switch response.result {
+            case .success(let stockPortfolioResponse):
+                completion(stockPortfolioResponse, nil)
+                print(stockPortfolioResponse)
             case .failure(let error):
                 completion(nil, error)
             }

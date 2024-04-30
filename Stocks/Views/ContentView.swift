@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var searchThrottleTimer: Timer?
     @State private var autocompleteResults: [StockAutocomplete] = []
     @State var walletBalance: Int?
+    
     @StateObject var portfolioViewModel = PortfolioViewModel()
     @StateObject var favoritesViewModel = FavoritesViewModel()
     
@@ -29,9 +30,9 @@ struct ContentView: View {
                             Spacer()
                             PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
                         }
-                        ForEach(portfolioViewModel.portfolioStocks) { stock in
-                            NavigationLink(destination: StockDetailsView(stock: StockTicker(symbol: stock.symbol))) {
-                                StockDetailsHomeRow(stock: stock)
+                        ForEach(portfolioViewModel.portfolioStocks,  id: \.ticker) { stock in
+                            NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: stock.ticker))) {
+                                StockDetailsPortfolioRow(stock: stock)
                             }
                         }
                         .onDelete(perform: deletePortfolioStock)
@@ -39,20 +40,20 @@ struct ContentView: View {
                     }
                     
                     Section(header: Text("FAVORITES").bold().font(.subheadline)) {
-                        ForEach(favoritesViewModel.favoriteStocks) { stock in
-                            NavigationLink(destination: StockDetailsView(stock: StockTicker(symbol: stock.symbol))) {
-                                StockDetailsHomeRow(stock: stock)
+                        ForEach(favoritesViewModel.favoriteStocks,  id: \.ticker) { stock in
+                            NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: stock.ticker))) {
+                                StockDetailsWishlistRow(stock: stock)
                             }
                         }
                         .onDelete(perform: deleteFavoriteStock)
                         .onMove(perform: moveFavoriteStock)
                     }
                 } else {
-                    ForEach(autocompleteResults, id: \.symbol) { result in
+                    ForEach(autocompleteResults, id: \.ticker) { result in
                         HStack {
-                            NavigationLink(destination: StockDetailsView(stock: StockTicker(symbol: result.displaySymbol))){
+                            NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: result.displaySymbol))){
                                 VStack(alignment: .leading) {
-                                    Text(result.symbol)
+                                    Text(result.ticker)
                                         .font(.headline)
                                     Text(result.description)
                                         .font(.subheadline)
@@ -136,30 +137,63 @@ struct PortfolioAccountRow: View {
     }
 }
 
-struct StockDetailsHomeRow: View {
+struct StockDetailsPortfolioRow: View {
     var stock: StockPortfolio
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(stock.symbol)
-                    .font(.headline)
+                Text(stock.ticker)
+                    .font(.title2)
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                Text(String(format: "%.0f", stock.quantity) + " Shares")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            VStack(alignment: .trailing) {
+                Text(String(format: "%.2f", stock.price * stock.quantity))
+                    .font(.title2)
+                HStack(spacing: 4) {
+                    Image(systemName: stock.isPositive ? "arrow.up.right" : "arrow.down.right")
+                        .foregroundColor(stock.isPositive ? .green : .red)
+                    Text(String(format: "%.2f", stock.changePrice))
+                        .foregroundColor(stock.isPositive ? .green : .red)
+                    Text("(" + stock.changePricePercent + ")")
+                        .foregroundColor(stock.isPositive ? .green : .red)
+                }
+            }
+        }.font(.title3)
+    }
+}
+
+struct StockDetailsWishlistRow: View {
+    var stock: StockWishlist
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(stock.ticker)
+                    .font(.title2)
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 Text(stock.companyName)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(stock.price)
-                    .font(.headline)
+                Text(String(format: "%.2f", stock.price))
+                    .font(.title2)
                 HStack(spacing: 4) {
                     Image(systemName: stock.isPositive ? "arrow.up.right" : "arrow.down.right")
                         .foregroundColor(stock.isPositive ? .green : .red)
-                    Text(stock.change)
+                    Text(String(format: "%.2f", stock.changePrice))
+                        .foregroundColor(stock.isPositive ? .green : .red)
+                    Text("(" + stock.changePricePercent + ")")
                         .foregroundColor(stock.isPositive ? .green : .red)
                 }
             }
-        }
+        }.font(.title3)
     }
 }
 
