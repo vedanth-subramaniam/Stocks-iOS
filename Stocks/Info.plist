@@ -8,8 +8,6 @@
 		<true/>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
-		<key>NSAllowsArbitraryLoadsUsageDescription</key>
-		<dict/>
 	</dict>
 </dict>
 </plist>
