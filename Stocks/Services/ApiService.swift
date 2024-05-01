@@ -57,7 +57,7 @@ class ApiService {
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = jsonData
-
+            
             // Send the request with Alamofire
             AF.request(request).responseDecodable(of: ApiResponse.self) { response in
                 switch response.result {
@@ -67,14 +67,68 @@ class ApiService {
                     print("Error: \(error.localizedDescription)")
                 }
             }        } else {
-            print("Error: Could not encode Post to JSON")
-        }
+                print("Error: Could not encode Post to JSON")
+            }
     }
+    
     func fetchFavoriteStocks(completion: @escaping ([StockWishlist]?, Error?) -> Void) {
         AF.request("\(baseURL)/getAllStocksWishlist").responseDecodable(of: [StockWishlist].self) { response in
             switch response.result {
             case .success(let favouriteStocks):
                 completion(favouriteStocks, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func fetchSingleFavStock(symbol: String, completion: @escaping (StockWishlist?, Error?) -> Void) {
+        print("Fetching single favourite record")
+        let endpoint = "/getStockWishlist/\(symbol)"
+        print(endpoint)
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockWishlist.self) { response in
+            switch response.result {
+            case .success(let stockWishlistResponse):
+                completion(stockWishlistResponse, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func updateFavStock(wishListRecord:StockWishlistDb, completion: @escaping (ApiResponse?, Error?) -> Void) {
+        
+        print("Going to update/insert the following wishlist record")
+        print(wishListRecord)
+        let url = "http://localhost:8080/insertStockWishlist"
+        
+        if let jsonData = try? JSONEncoder().encode(wishListRecord) {
+            // Create an URLRequest object
+            var request = URLRequest(url: URL(string: url)!)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonData
+            
+            // Send the request with Alamofire
+            AF.request(request).responseDecodable(of: ApiResponse.self) { response in
+                switch response.result {
+                case .success(let apiResponse):
+                    print("Response received: \(apiResponse.message)")
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                }
+            }        } else {
+                print("Error: Could not encode Post to JSON")
+            }
+    }
+    
+    func deleteFavStock(symbol: String, completion: @escaping (ApiResponse?, Error?) -> Void) {
+        print("Deleting favourite record")
+        let endpoint = "/deleteStockFromWishlist/\(symbol)"
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: ApiResponse.self) { response in
+            switch response.result {
+            case .success(let stockWishlistResponse):
+                completion(stockWishlistResponse, nil)
             case .failure(let error):
                 completion(nil, error)
             }
@@ -104,7 +158,7 @@ class ApiService {
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = jsonData
-
+            
             // Send the request with Alamofire
             AF.request(request).responseDecodable(of: ApiResponse.self) { response in
                 switch response.result {
@@ -113,8 +167,9 @@ class ApiService {
                 case .failure(let error):
                     print("Error: \(error.localizedDescription)")
                 }
-            }        } else {
-            print("Error: Could not encode Post to JSON")
+            }
+        } else {
+                print("Error: Could not encode Post to JSON")
         }
     }
     

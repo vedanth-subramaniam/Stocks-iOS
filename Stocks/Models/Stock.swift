@@ -36,7 +36,7 @@ struct StockPortfolioDb: Codable {
 
 struct StockWishlistDb: Codable {
     var ticker: String
-    var companyName: Double
+    var companyName: String
 }
 struct StockTicker: Codable {
     var ticker: String
