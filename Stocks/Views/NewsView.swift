@@ -33,6 +33,8 @@ struct NewsArticleRow: View {
         }.sheet(isPresented: $showingNewsDetailsSheet) {
             NewsDetailView(news: article)
         }
+        }.onAppear(){
+            print(article)
         }
     }
 }
@@ -48,11 +50,12 @@ struct NewsDetailView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(" \(news.source)")
                     Text(" \(formattedDate(news.datetime))")
-                    
-                }
+                        .foregroundColor(.gray)
+                }.foregroundColor(.primary)
                 Divider()
                 Text(news.headline)
-                    .font(.headline)
+                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading)
+                    .font(.title2)
                     .bold()
                 
                 Text(news.summary)
@@ -123,7 +126,7 @@ struct NewsDetailView: View {
     }
 }
 
-//
-//#Preview {
-//    NewsArticleRow(article: )
-//}
+
+#Preview {
+    NewsArticleRow(article: NewsArticle(category: "company", datetime: 1714288946.0, headline: "Wall Street Breakfast: The Week Ahead", id: 127283245, image: "https://static.seekingalpha.com/cdn/s3/uploads/getty_images/2099872675/image_2099872675.jpg?io=getty-c-w1536", related: "AAPL", source: "SeekingAlpha", summary: "This article discusses the upcoming events in the financial world, including the Federal Reserve meeting, corporate earnings, IPOs, and investor events.", url: "https://finnhub.io/api/news?id=7be97f283d93041833ca7fa1618b6ac8f1ae4baee4b9c7769a9c7367dd3afaa9"))
+}

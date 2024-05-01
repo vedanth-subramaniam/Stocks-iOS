@@ -34,10 +34,18 @@ struct StockDetailsView: View {
                         }
                         
                         Section(){
-                            WebView(htmlFilename: "Charts", ticker: stock.ticker).frame(height: 320)
+                            TabView{
+                                WebView(htmlFilename: "Charts", ticker: stock.ticker).frame(height:320).tabItem { Label("Hourly", systemImage: "list.dash")}
+                                
+                                WebView(htmlFilename: "Charts", ticker: stock.ticker).frame(height: 320).tabItem { Label("Historical", systemImage: "list.dash")}
+                            }.frame(height: 320)
                         }
                         Section(header: Text("Portfolio").fontWeight(.semibold).font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading).padding()){
                             PortfolioView(stock:stock)
+                        }
+                        
+                        Section(){
+                            StockPriceAndInsightsView(stockSummaryResponse: stockSummaryResponse, stockInsightsResponse: stockInsightsResponse)
                         }
                         Section(header: Text("News").fontWeight(.semibold).font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading).padding()){
                             ForEach(stockNewsResponse!,  id: \.id) { news in

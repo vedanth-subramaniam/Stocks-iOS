@@ -46,17 +46,11 @@ struct StockAutocomplete: Codable {
     var id: String?
     var description: String
     var displaySymbol: String
-    var ticker: String
+    var symbol: String
     var type: String
     var primary: [String]?
-
-    enum CodingKeys: String, CodingKey {
-        case description
-        case displaySymbol
-        case ticker
-        case type
-        case primary
-    }
 }
 
-
+struct StockWalletBalance: Codable{
+    var walletBalance: Double
+}

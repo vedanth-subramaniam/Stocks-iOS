@@ -8,6 +8,7 @@ class ApiService {
     
     func fetchAutocompleteData(query: String, completion: @escaping([StockAutocomplete]?, Error?) -> Void) {
         let endpoint = "/autoComplete/\(query)"
+        print(endpoint)
         AF.request("\(baseURL)\(endpoint)").responseDecodable(of: [StockAutocomplete].self) { response in
             switch response.result {
             case .success(let stockAutocomplete):
@@ -30,6 +31,21 @@ class ApiService {
         }
     }
     
+    func fetchSinglePortfolioRecord(symbol: String, completion: @escaping (StockPortfolio?, Error?) -> Void) {
+        print("Fetching single portfolio record")
+        let endpoint = "/getPortfolioData/\(symbol)"
+        print(endpoint)
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockPortfolio.self) { response in
+            switch response.result {
+            case .success(let stockPortfolioResponse):
+                completion(stockPortfolioResponse, nil)
+                print(stockPortfolioResponse)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
     func fetchFavoriteStocks(completion: @escaping ([StockWishlist]?, Error?) -> Void) {
         AF.request("\(baseURL)/getAllStocksWishlist").responseDecodable(of: [StockWishlist].self) { response in
             switch response.result {
@@ -42,15 +58,26 @@ class ApiService {
         }
     }
     
-    func fetchSinglePortfolioRecord(symbol: String, completion: @escaping (StockPortfolio?, Error?) -> Void) {
-        print("Fetching single portfolio record")
-        let endpoint = "/getPortfolioData/\(symbol)"
-        print(endpoint)
-        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockPortfolio.self) { response in
+    func fetchWalletBalance(completion: @escaping (StockWalletBalance?, Error?) -> Void) {
+        let endpoint = "/wallet"
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockWalletBalance.self) { response in
             switch response.result {
-            case .success(let stockPortfolioResponse):
-                completion(stockPortfolioResponse, nil)
-                print(stockPortfolioResponse)
+            case .success(let stockWalletBalance):
+                completion(stockWalletBalance, nil)
+                print("Wallet Balance is: ", stockWalletBalance)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func updateWalletBalance(completion: @escaping (StockWalletBalance?, Error?) -> Void) {
+        let endpoint = "/wallet"
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockWalletBalance.self) { response in
+            switch response.result {
+            case .success(let stockWalletBalance):
+                completion(stockWalletBalance, nil)
+                print("Wallet Balance is: ", stockWalletBalance)
             case .failure(let error):
                 completion(nil, error)
             }
@@ -116,4 +143,5 @@ class ApiService {
             }
         }
     }
+    
 }

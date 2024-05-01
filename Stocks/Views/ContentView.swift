@@ -50,16 +50,19 @@ struct ContentView: View {
                     }
                     
                 } else {
-                    ForEach(autocompleteResults, id: \.ticker) { result in
-                        HStack {
-                            NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: result.displaySymbol))){
-                                VStack(alignment: .leading) {
-                                    Text(result.ticker)
-                                        .font(.headline)
-                                    Text(result.description)
-                                        .font(.subheadline)
+                    ForEach(autocompleteResults, id: \.symbol) { result in
+                        if (!result.symbol.contains(".")){
+                            HStack {
+                                NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: result.displaySymbol))){
+                                    VStack(alignment: .leading) {
+                                        
+                                        Text(result.symbol)
+                                            .font(.headline)
+                                        Text(result.description)
+                                            .font(.subheadline)
+                                    }
+                                    Spacer()
                                 }
-                                Spacer()
                             }
                         }
                     }
@@ -79,6 +82,10 @@ struct ContentView: View {
                 }
             }
             .onAppear(){
+                portfolioViewModel.fetchPortfolioData()
+                favoritesViewModel.fetchFavoriteStocks()
+            }.onReceive(Timer.publish(every: 10, on: .main, in: .common).autoconnect()) { _ in
+                // Periodic fetch every 10 seconds
                 portfolioViewModel.fetchPortfolioData()
                 favoritesViewModel.fetchFavoriteStocks()
             }
@@ -103,12 +110,14 @@ struct ContentView: View {
     }
     
     func performSearch(query: String) {
+        print(query)
         ApiService.shared.fetchAutocompleteData(query: query) { results, error in
             DispatchQueue.main.async {
                 if let results = results {
+                    print(results)
                     self.autocompleteResults = results
                 } else {
-                    print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+                    print("Error fetching autocomplete data: \(error?.localizedDescription ?? "Unknown error")")
                     self.autocompleteResults = []
                 }
             }

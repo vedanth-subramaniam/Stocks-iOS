@@ -27,7 +27,7 @@ struct StockProfile: Codable {
     let phone: String?
     let shareOutstanding: Double?
     let ticker: String?
-    let weburl: URL?
+    let weburl: URL
 }
 
 struct LatestPrice: Codable {
