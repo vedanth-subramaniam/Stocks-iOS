@@ -35,7 +35,7 @@ struct StockDetailsView: View {
                         
                         Section(){
                             TabView{
-                                WebView(htmlFilename: "Charts", ticker: stock.ticker).frame(height:320).tabItem { Label("Hourly", systemImage: "list.dash")}
+                                WebView(htmlFilename: "HourlyCharts", ticker: stock.ticker).frame(height:320).tabItem { Label("Hourly", systemImage: "list.dash")}
                                 
                                 WebView(htmlFilename: "Charts", ticker: stock.ticker).frame(height: 320).tabItem { Label("Historical", systemImage: "list.dash")}
                             }.frame(height: 320)

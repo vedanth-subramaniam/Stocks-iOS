@@ -31,7 +31,12 @@ struct WebView: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             let jsCode = "loadChartWithData('\(self.parent.ticker)');"
+            print(jsCode)
             webView.evaluateJavaScript(jsCode, completionHandler: { (result, error) in
+                if let result = result {
+                    print(jsCode)
+                    print("HEY")
+                }
                 if let error = error {
                     print("JavaScript execution error: \(error.localizedDescription)")
                 }
@@ -39,6 +44,7 @@ struct WebView: UIViewRepresentable {
         }
     }
 }
+
 #Preview {
     WebView(htmlFilename: "Charts", ticker: "TSLA")
 }

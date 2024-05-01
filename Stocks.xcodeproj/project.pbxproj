@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C19E10B2BE23EDD0059BF29 /* HourlyCharts.html in Resources */ = {isa = PBXBuildFile; fileRef = 0C19E10A2BE23EDD0059BF29 /* HourlyCharts.html */; };
 		0C1A9C202BCB97CB00B8E98D /* StocksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1A9C1F2BCB97CB00B8E98D /* StocksApp.swift */; };
 		0C1A9C222BCB97CB00B8E98D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1A9C212BCB97CB00B8E98D /* ContentView.swift */; };
 		0C1A9C242BCB97CC00B8E98D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C1A9C232BCB97CC00B8E98D /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 		0C1F4C0A2BE08E2A00F0DD31 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1F4C092BE08E2A00F0DD31 /* WebView.swift */; };
 		0C1F4C102BE0953900F0DD31 /* Charts.html in Resources */ = {isa = PBXBuildFile; fileRef = 0C1F4C0F2BE0953900F0DD31 /* Charts.html */; };
 		0C39062C2BD74AEC00060EE0 /* StockSummaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C39062B2BD74AEC00060EE0 /* StockSummaryModel.swift */; };
+		0C7820012BE2AED4003A4E22 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C7820002BE2AED4003A4E22 /* Launch Screen.storyboard */; };
 		0CBD5F332BD4B8DD00B7A256 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0CBD5F322BD4B8DD00B7A256 /* Alamofire */; };
 		0CBD5F372BD4BDC200B7A256 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD5F362BD4BDC200B7A256 /* ApiService.swift */; };
 		0CBD5F392BD4C1A400B7A256 /* PortfolioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD5F382BD4C1A400B7A256 /* PortfolioViewModel.swift */; };
@@ -51,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C19E10A2BE23EDD0059BF29 /* HourlyCharts.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = HourlyCharts.html; sourceTree = "<group>"; };
 		0C1A9C1C2BCB97CB00B8E98D /* Stocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C1A9C1F2BCB97CB00B8E98D /* StocksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StocksApp.swift; sourceTree = "<group>"; };
 		0C1A9C212BCB97CB00B8E98D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,6 +68,7 @@
 		0C1F4C0F2BE0953900F0DD31 /* Charts.html */ = {isa = PBXFileReference; explicitFileType = text.html; path = Charts.html; sourceTree = "<group>"; };
 		0C1F4C112BE0C6FD00F0DD31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0C39062B2BD74AEC00060EE0 /* StockSummaryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockSummaryModel.swift; sourceTree = "<group>"; };
+		0C7820002BE2AED4003A4E22 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		0CBD5F362BD4BDC200B7A256 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		0CBD5F382BD4C1A400B7A256 /* PortfolioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewModel.swift; sourceTree = "<group>"; };
 		0CBD5F3C2BD4C21200B7A256 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
@@ -137,6 +141,7 @@
 				0C1A9C1F2BCB97CB00B8E98D /* StocksApp.swift */,
 				0C1A9C232BCB97CC00B8E98D /* Assets.xcassets */,
 				0C1A9C252BCB97CC00B8E98D /* Preview Content */,
+				0C7820002BE2AED4003A4E22 /* Launch Screen.storyboard */,
 			);
 			path = Stocks;
 			sourceTree = "<group>";
@@ -177,6 +182,7 @@
 				0CC377DB2BE17F660095B047 /* NewsView.swift */,
 				0CC377DD2BE1A2710095B047 /* StockPriceAndInsightsView.swift */,
 				0CC463692BE1FD740042A925 /* ToastView.swift */,
+				0C19E10A2BE23EDD0059BF29 /* HourlyCharts.html */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -322,8 +328,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C19E10B2BE23EDD0059BF29 /* HourlyCharts.html in Resources */,
 				0C1A9C272BCB97CC00B8E98D /* Preview Assets.xcassets in Resources */,
 				0C1A9C242BCB97CC00B8E98D /* Assets.xcassets in Resources */,
+				0C7820012BE2AED4003A4E22 /* Launch Screen.storyboard in Resources */,
 				0C1F4C102BE0953900F0DD31 /* Charts.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -525,6 +533,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Stocks/Preview Content\"";
@@ -534,6 +543,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -554,6 +564,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Stocks/Preview Content\"";
@@ -563,6 +574,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
