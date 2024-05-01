@@ -5,8 +5,7 @@ struct ContentView: View {
     @State private var searchText: String = ""
     @State private var searchThrottleTimer: Timer?
     @State private var autocompleteResults: [StockAutocomplete] = []
-    @State var walletBalance: Int?
-    
+    @State var stockWalletBalance: StockWalletBalance?
     @StateObject var portfolioViewModel = PortfolioViewModel()
     @StateObject var favoritesViewModel = FavoritesViewModel()
     
@@ -26,9 +25,9 @@ struct ContentView: View {
                     
                     Section(header: Text("PORTFOLIO").bold().font(.subheadline)) {
                         HStack{
-                            PortfolioAccountRow(label: "Net Worth", value: "$25009.72")
+                            PortfolioAccountRow(label: "Net Worth", value: 21344.46)
                             Spacer()
-                            PortfolioAccountRow(label: "Cash Balance", value: "$21747.26")
+                            PortfolioAccountRow(label: "Cash Balance", value: stockWalletBalance?.balance ?? 0)
                         }
                         ForEach(portfolioViewModel.portfolioStocks,  id: \.ticker) { stock in
                             NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: stock.ticker))) {
@@ -84,8 +83,8 @@ struct ContentView: View {
             .onAppear(){
                 portfolioViewModel.fetchPortfolioData()
                 favoritesViewModel.fetchFavoriteStocks()
+                fetchWalletBalance()
             }.onReceive(Timer.publish(every: 10, on: .main, in: .common).autoconnect()) { _ in
-                // Periodic fetch every 10 seconds
                 portfolioViewModel.fetchPortfolioData()
                 favoritesViewModel.fetchFavoriteStocks()
             }
@@ -114,7 +113,6 @@ struct ContentView: View {
         ApiService.shared.fetchAutocompleteData(query: query) { results, error in
             DispatchQueue.main.async {
                 if let results = results {
-                    print(results)
                     self.autocompleteResults = results
                 } else {
                     print("Error fetching autocomplete data: \(error?.localizedDescription ?? "Unknown error")")
@@ -129,18 +127,30 @@ struct ContentView: View {
         formatter.dateFormat = "MMMM d, yyyy"
         return formatter.string(from: Date())
     }
+    
+    func fetchWalletBalance() {
+        ApiService.shared.fetchWalletBalance() { results, error in
+            DispatchQueue.main.async {
+                if let results = results {
+                    self.stockWalletBalance = results
+                } else {
+                    print("Error fetching wallet balance: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
+    }
 }
 
 
 struct PortfolioAccountRow: View {
     var label: String
-    var value: String
+    var value: Double
     
     var body: some View {
         VStack(alignment: .leading) {
             Text(label)
                 .font(.title2)
-            Text(value)
+            Text("$" + String(format: "%.2f", value))
                 .bold()
                 .font(.title2)
         }

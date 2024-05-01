@@ -52,5 +52,10 @@ struct StockAutocomplete: Codable {
 }
 
 struct StockWalletBalance: Codable{
-    var walletBalance: Double
+    var balance: Double
+}
+
+struct ApiResponse: Decodable {
+    var success: Bool?
+    var message: String
 }

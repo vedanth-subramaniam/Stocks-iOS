@@ -39,19 +39,42 @@ class ApiService {
             switch response.result {
             case .success(let stockPortfolioResponse):
                 completion(stockPortfolioResponse, nil)
-                print(stockPortfolioResponse)
             case .failure(let error):
                 completion(nil, error)
             }
         }
     }
     
+    func updatePortfolioRecord(portfolioRecord:StockPortfolioDb, completion: @escaping (ApiResponse?, Error?) -> Void) {
+        
+        print("Going to update/insert the following portfolio record")
+        print(portfolioRecord)
+        let url = "http://localhost:8080/insertIntoPortfolio"
+        
+        if let jsonData = try? JSONEncoder().encode(portfolioRecord) {
+            // Create an URLRequest object
+            var request = URLRequest(url: URL(string: url)!)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonData
+
+            // Send the request with Alamofire
+            AF.request(request).responseDecodable(of: ApiResponse.self) { response in
+                switch response.result {
+                case .success(let apiResponse):
+                    print("Response received: \(apiResponse.message)")
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                }
+            }        } else {
+            print("Error: Could not encode Post to JSON")
+        }
+    }
     func fetchFavoriteStocks(completion: @escaping ([StockWishlist]?, Error?) -> Void) {
         AF.request("\(baseURL)/getAllStocksWishlist").responseDecodable(of: [StockWishlist].self) { response in
             switch response.result {
             case .success(let favouriteStocks):
                 completion(favouriteStocks, nil)
-                print(favouriteStocks)
             case .failure(let error):
                 completion(nil, error)
             }
@@ -71,16 +94,27 @@ class ApiService {
         }
     }
     
-    func updateWalletBalance(completion: @escaping (StockWalletBalance?, Error?) -> Void) {
-        let endpoint = "/wallet"
-        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: StockWalletBalance.self) { response in
-            switch response.result {
-            case .success(let stockWalletBalance):
-                completion(stockWalletBalance, nil)
-                print("Wallet Balance is: ", stockWalletBalance)
-            case .failure(let error):
-                completion(nil, error)
-            }
+    func updateWalletBalance(wallet:StockWalletBalance, completion: @escaping (ApiResponse?, Error?) -> Void) {
+        print(wallet)
+        print("Going to update")
+        let url = "http://localhost:8080/updateWalletBalance"
+        if let jsonData = try? JSONEncoder().encode(wallet) {
+            // Create an URLRequest object
+            var request = URLRequest(url: URL(string: url)!)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonData
+
+            // Send the request with Alamofire
+            AF.request(request).responseDecodable(of: ApiResponse.self) { response in
+                switch response.result {
+                case .success(let apiResponse):
+                    print("Response received: \(apiResponse.message)")
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                }
+            }        } else {
+            print("Error: Could not encode Post to JSON")
         }
     }
     
@@ -90,6 +124,19 @@ class ApiService {
             switch response.result {
             case .success(let stockSummaryApiResponse):
                 completion(stockSummaryApiResponse, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func fetchLatestPrice(symbol: String, completion: @escaping (LatestPrice?, Error?) -> Void) {
+        print("Fetching latest price")
+        let endpoint = "/latestPrice/\(symbol)"
+        AF.request("\(baseURL)\(endpoint)").responseDecodable(of: LatestPrice.self) { response in
+            switch response.result {
+            case .success(let latestPrice):
+                completion(latestPrice, nil)
             case .failure(let error):
                 completion(nil, error)
             }

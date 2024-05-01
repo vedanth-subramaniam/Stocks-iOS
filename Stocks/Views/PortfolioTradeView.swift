@@ -12,7 +12,6 @@ struct PortfolioView: View {
     @State private var showingTradeSheet = false
     @StateObject var portfolioViewModel = PortfolioViewModel()
     
-    
     var body: some View {
         HStack() {
             VStack(alignment:.leading) {
@@ -71,14 +70,17 @@ struct PortfolioView: View {
         .cornerRadius(12)
         .onAppear(){
             portfolioViewModel.fetchPortfolioRecord(ticker: stock.ticker)
+            portfolioViewModel.fetchWalletBalance()
         }
     }
 }
 
 struct TradeSheetView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var portfolioViewModel = PortfolioViewModel()
-    @State var numberOfShares: String  = "0"
+    @StateObject var portfolioViewModel = PortfolioViewModel()  // Changed to StateObject to ensure it persists correctly
+    @State var numberOfShares: String = "0"
+    @State private var showingToast = false
+    @State private var toastMessage = ""
     
     var body: some View {
         VStack {
@@ -97,50 +99,59 @@ struct TradeSheetView: View {
                 .fontWeight(.semibold)
             
             Spacer()
-            HStack(){
-                TextField("0",text: $numberOfShares)
+            HStack {
+                TextField("0", text: $numberOfShares)
                     .font(.system(size: 100))
                     .fontWeight(.light)
-                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
-                VStack(alignment:.trailing){
+                VStack(alignment: .trailing) {
                     Text("Shares")
                         .font(.title)
                         .fontWeight(.semibold)
-
-                    Text(" × " +
-                        String(format: "$%.2f", portfolioViewModel.portfolioRecord?.price ?? 0) +
-                        "/share = " +
-                        String(format: "$%.2f", (portfolioViewModel.portfolioRecord?.price ?? 0) * (Double(numberOfShares) ?? 0))
-                    )
-                    .font(.callout)
-                    .foregroundColor(.gray)
-                    .frame(width: 250, height: 50, alignment: .trailing)
+                    
+                    Text(" × \(String(format: "$%.2f", portfolioViewModel.portfolioRecord?.price ?? 0))/share = \(String(format: "$%.2f", (portfolioViewModel.portfolioRecord?.price ?? 0) * (Double(numberOfShares) ?? 0)))")
+                        .font(.callout)
+                        .foregroundColor(.gray)
+                        .frame(width: 250, height: 50, alignment: .trailing)
                 }
             }.padding()
             
             Spacer()
             
-            Text("$22260.53 available to buy AAPL")
+            Text("\(String(format: "%.2f", portfolioViewModel.stockWalletBalance?.balance ?? 0)) available to buy AAPL")
                 .font(.callout)
                 .foregroundColor(.gray)
                 .padding(.bottom)
             
             HStack(spacing: 20) {
                 Button("Buy") {
-                    // Handle buy action
+                    portfolioViewModel.buyShares(count: Double(numberOfShares) ?? 0)
                 }
                 .buttonStyle(GreenButtonStyle())
                 
                 Button("Sell") {
-                    // Handle sell action
+                    portfolioViewModel.sellShares(count: Double(numberOfShares) ?? 0)
                 }
                 .buttonStyle(GreenButtonStyle())
             }
             .padding()
-        }
+        }.overlay(
+            ToastView(message: toastMessage, isShowing: $showingToast)
+                .animation(.easeInOut, value: showingToast)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                .padding(.bottom),
+            alignment: .bottom  // Align the overlay itself to the bottom
+        )
+        .onReceive(portfolioViewModel.$toastMessage, perform: { newMessage in
+            if !newMessage.isEmpty {
+                self.toastMessage = newMessage
+                self.showingToast = true
+            }
+        })
     }
 }
+
 
 struct GreenButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
@@ -154,6 +165,6 @@ struct GreenButtonStyle: ButtonStyle {
     }
 }
 
-//#Preview {
-//    PortfolioView(stock:StockTicker(ticker: "AAPL"))
-//}
+#Preview {
+    PortfolioView(stock:StockTicker(ticker: "AAPL"))
+}

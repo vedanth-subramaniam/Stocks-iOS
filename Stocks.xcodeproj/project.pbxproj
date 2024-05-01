@@ -28,6 +28,7 @@
 		0CC377DA2BE16ABE0095B047 /* PortfolioTradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC377D92BE16ABE0095B047 /* PortfolioTradeView.swift */; };
 		0CC377DC2BE17F660095B047 /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC377DB2BE17F660095B047 /* NewsView.swift */; };
 		0CC377DE2BE1A2710095B047 /* StockPriceAndInsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC377DD2BE1A2710095B047 /* StockPriceAndInsightsView.swift */; };
+		0CC4636A2BE1FD740042A925 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC463692BE1FD740042A925 /* ToastView.swift */; };
 		0CCF9DE82BDEF5B90016208C /* StockChartsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCF9DE72BDEF5B90016208C /* StockChartsModel.swift */; };
 		0CCF9DEB2BDF11E80016208C /* Highcharts in Frameworks */ = {isa = PBXBuildFile; productRef = 0CCF9DEA2BDF11E80016208C /* Highcharts */; };
 /* End PBXBuildFile section */
@@ -74,6 +75,7 @@
 		0CC377D92BE16ABE0095B047 /* PortfolioTradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioTradeView.swift; sourceTree = "<group>"; };
 		0CC377DB2BE17F660095B047 /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
 		0CC377DD2BE1A2710095B047 /* StockPriceAndInsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockPriceAndInsightsView.swift; sourceTree = "<group>"; };
+		0CC463692BE1FD740042A925 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		0CCF9DE72BDEF5B90016208C /* StockChartsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockChartsModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,6 +176,7 @@
 				0CC377D92BE16ABE0095B047 /* PortfolioTradeView.swift */,
 				0CC377DB2BE17F660095B047 /* NewsView.swift */,
 				0CC377DD2BE1A2710095B047 /* StockPriceAndInsightsView.swift */,
+				0CC463692BE1FD740042A925 /* ToastView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CC4636A2BE1FD740042A925 /* ToastView.swift in Sources */,
 				0CBD5F422BD4D3CA00B7A256 /* StockDetailsView.swift in Sources */,
 				0CBD5F3D2BD4C21200B7A256 /* FavoritesViewModel.swift in Sources */,
 				0C1A9C222BCB97CB00B8E98D /* ContentView.swift in Sources */,
