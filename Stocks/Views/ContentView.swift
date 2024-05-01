@@ -8,6 +8,7 @@ struct ContentView: View {
     @State var stockWalletBalance: StockWalletBalance?
     @StateObject var portfolioViewModel = PortfolioViewModel()
     @StateObject var favoritesViewModel = FavoritesViewModel()
+    @State var netWorth: Double = 21342.34
     
     var body: some View {
         NavigationView {
@@ -17,15 +18,16 @@ struct ContentView: View {
                     Section(){
                         HStack() {
                             Text(currentDateString())
-                                .fontWeight(.ultraLight)
-                                .font(.title2)
+                                .fontWeight(.bold)
+                                .font(.largeTitle)
+                                .foregroundColor(.gray)
                         }
                         .listRowBackground(Color.white)
                     }
                     
                     Section(header: Text("PORTFOLIO").bold().font(.subheadline)) {
                         HStack{
-                            PortfolioAccountRow(label: "Net Worth", value: 21344.46)
+                            PortfolioAccountRow(label: "Net Worth", value: netWorth)
                             Spacer()
                             PortfolioAccountRow(label: "Cash Balance", value: stockWalletBalance?.balance ?? 0)
                         }
@@ -54,11 +56,11 @@ struct ContentView: View {
                             HStack {
                                 NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: result.displaySymbol))){
                                     VStack(alignment: .leading) {
-                                        
                                         Text(result.symbol)
                                             .font(.headline)
                                         Text(result.description)
                                             .font(.subheadline)
+                                            .foregroundColor(.secondary)
                                     }
                                     Spacer()
                                 }
@@ -167,13 +169,14 @@ struct StockDetailsPortfolioRow: View {
                     .font(.title2)
                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 Text(String(format: "%.0f", stock.quantity) + " Shares")
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundColor(.secondary)
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(String(format: "%.2f", stock.price * stock.quantity))
-                    .font(.title2)
+                Text("$" + String(format: "%.2f", stock.price * stock.quantity))
+                    .font(.title3)
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 HStack(spacing: 4) {
                     Image(systemName: stock.isPositive ? "arrow.up.right" : "arrow.down.right")
                         .foregroundColor(stock.isPositive ? .green : .red)
@@ -197,13 +200,14 @@ struct StockDetailsWishlistRow: View {
                     .font(.title2)
                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 Text(stock.companyName)
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundColor(.secondary)
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(String(format: "%.2f", stock.price))
+                Text("$" + String(format: "%.2f", stock.price))
                     .font(.title2)
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 HStack(spacing: 4) {
                     Image(systemName: stock.isPositive ? "arrow.up.right" : "arrow.down.right")
                         .foregroundColor(stock.isPositive ? .green : .red)
