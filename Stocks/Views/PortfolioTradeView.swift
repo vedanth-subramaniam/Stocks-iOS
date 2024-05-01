@@ -14,42 +14,49 @@ struct PortfolioView: View {
     
     var body: some View {
         HStack() {
-            VStack(alignment:.leading) {
-                HStack {
-                    Text("Shares Owned:")
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.quantity ?? 0))
+            if let quantity = portfolioViewModel.portfolioRecord?.quantity, quantity > 0{
+                VStack(alignment:.leading) {
+                    HStack {
+                        Text("Shares Owned:")
+                            .fontWeight(.semibold)
+                        Spacer()
+                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.quantity ?? 0))
+                    }
+                    
+                    HStack {
+                        Text("Avg. Cost / Share:")
+                            .fontWeight(.semibold)
+                        Spacer()
+                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.averagePrice ?? 0))
+                    }
+                    
+                    HStack {
+                        Text("Total Cost:")
+                            .fontWeight(.semibold)
+                        Spacer()
+                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.totalCost ?? 0))
+                    }
+                    
+                    HStack {
+                        Text("Change:")
+                            .fontWeight(.semibold)
+                        Spacer()
+                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.changePrice ?? 0))                                        }
+                    
+                    HStack {
+                        Text("Market Value:")
+                            .fontWeight(.semibold)
+                        Spacer()
+                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.marketValue ?? 0))                        .fontWeight(.bold)
+                    }
                 }
-                
-                HStack {
-                    Text("Avg. Cost / Share:")
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.averagePrice ?? 0))
-                }
-                
-                HStack {
-                    Text("Total Cost:")
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.totalCost ?? 0))
-                }
-                
-                HStack {
-                    Text("Change:")
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.changePrice ?? 0))                                        }
-                
-                HStack {
-                    Text("Market Value:")
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.marketValue ?? 0))                        .fontWeight(.bold)
-                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                VStack(alignment: .leading){
+                    Text("You have 0 shares of " + (portfolioViewModel.portfolioRecord?.ticker ?? "")).frame(width: 200, alignment: .leading)
+                    Text("Start Trading!")
+                }.font(.subheadline)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
             
             Spacer()
             
@@ -81,6 +88,8 @@ struct TradeSheetView: View {
     @State var numberOfShares: String = "0"
     @State private var showingToast = false
     @State private var toastMessage = ""
+    @State private var showSuccessModal = false
+    @State private var transactionMessage = ""
     
     var body: some View {
         VStack {
@@ -88,6 +97,7 @@ struct TradeSheetView: View {
                 Spacer()
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
+                    portfolioViewModel.fetchPortfolioRecord(ticker: portfolioViewModel.portfolioRecord?.ticker ?? "")
                 }) {
                     Image(systemName: "xmark")
                 }
@@ -143,12 +153,24 @@ struct TradeSheetView: View {
                 .padding(.bottom),
             alignment: .bottom  // Align the overlay itself to the bottom
         )
-        .onReceive(portfolioViewModel.$toastMessage, perform: { newMessage in
+        .sheet(isPresented: $showSuccessModal) {
+            // This is the custom modal view, adjust as necessary
+            SuccessModalView(message: transactionMessage, show: $showSuccessModal)
+        }        .onReceive(portfolioViewModel.$toastMessage, perform: { newMessage in
             if !newMessage.isEmpty {
                 self.toastMessage = newMessage
                 self.showingToast = true
             }
         })
+        .onReceive(portfolioViewModel.$transactionMessage, perform: { newMessage in
+            self.transactionMessage = newMessage
+            self.showSuccessModal = true
+        }).onAppear(){
+            self.transactionMessage = ""
+            self.showingToast = false
+            self.toastMessage = ""
+            self.showSuccessModal = false
+        }
     }
 }
 
@@ -165,6 +187,36 @@ struct GreenButtonStyle: ButtonStyle {
     }
 }
 
+struct SuccessModalView: View {
+    var message: String
+    @Binding var show: Bool
+    
+    var body: some View {
+        VStack {
+            Text("Congratulations!")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            
+            Text(message)
+                .multilineTextAlignment(.center)
+                .font(.headline)
+                .fontWeight(.bold)
+            Button("Done") {
+                show = false // This will dismiss the modal
+            }
+            .foregroundColor(.white)
+            .padding()
+            .background(Color.green)
+            .cornerRadius(20)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.green)
+        .foregroundColor(.white)
+        .edgesIgnoringSafeArea(.all)
+    }
+}
+
+
 #Preview {
-    PortfolioView(stock:StockTicker(ticker: "AAPL"))
+    PortfolioView(stock:StockTicker(ticker: "GOOGL"))
 }

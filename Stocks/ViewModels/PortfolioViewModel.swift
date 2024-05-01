@@ -12,7 +12,7 @@ class PortfolioViewModel: ObservableObject {
     @Published var portfolioRecord: StockPortfolio?
     @Published var stockWalletBalance: StockWalletBalance?
     @Published var toastMessage = ""
-
+    @Published var transactionMessage = ""
     
     func fetchPortfolioData() {
         ApiService.shared.fetchPortfolioData { [weak self] stocks, error in
@@ -44,7 +44,7 @@ class PortfolioViewModel: ObservableObject {
                             self?.portfolioRecord?.changePrice = 0
                             self?.portfolioRecord?.changePricePercent = "0%"
                             self?.portfolioRecord = StockPortfolio(ticker: ticker, quantity: 0, totalCost: 0, averagePrice: 0, price: price.c ?? 0, marketValue: 0, changePrice: 0, changePricePercent: "0%", isPositive: false)
-                            print("Created new record")
+                            print("Created new record") 
                             print(self?.portfolioRecord)
                         }
                     } else if let error = error {
@@ -109,12 +109,14 @@ class PortfolioViewModel: ObservableObject {
         if totalCost <= balance {
             stockWalletBalance?.balance -= totalCost
             portfolioRecord?.quantity += count
+            portfolioRecord?.totalCost += totalCost
             print("Updated wallet balance")
+            updateWalletBalance()
             print(stockWalletBalance)
             print("Updated portfolio Record")
             updatePortfolioRecord(portfolioRecord: StockPortfolioDb(ticker: portfolioRecord?.ticker ?? "", quantity: portfolioRecord?.quantity ?? 0, totalCost: portfolioRecord?.totalCost ?? 0))
             print(portfolioRecord)
-            updateWalletBalance()
+            transactionMessage = "You have successfully bought 2 shares of AAPL"
         } else {
             showToast(message: "Not enough money to buy")
         }
@@ -134,12 +136,15 @@ class PortfolioViewModel: ObservableObject {
             if let pricePerShare = portfolioRecord?.price {
                 stockWalletBalance?.balance += pricePerShare * count
             }
+            let totalCost = (portfolioRecord?.price ?? 0) * count
+            portfolioRecord?.totalCost -= totalCost
             print("Updated wallet balance")
             print(stockWalletBalance)
             print("Updated portfolio Record")
             print(portfolioRecord)
             updatePortfolioRecord(portfolioRecord: StockPortfolioDb(ticker: portfolioRecord?.ticker ?? "", quantity: portfolioRecord?.quantity ?? 0, totalCost: portfolioRecord?.totalCost ?? 0))
             updateWalletBalance()
+            transactionMessage = "You have successfully sold 2 shares of AAPL"
         } else {
             showToast(message: "Not enough shares to sell")
         }
