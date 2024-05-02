@@ -28,7 +28,7 @@ struct StockDetailsView: View {
     var body: some View {
         VStack {
             if isLoading {
-                ProgressView("Loading...")
+                ProgressView("Fetching stock details...")
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(1.5)
             } else {
@@ -40,9 +40,9 @@ struct StockDetailsView: View {
                     
                     Section(){
                         TabView{
-                            WebView(htmlFilename: "HourlyCharts", ticker: stock.ticker).frame(height:320).tabItem { Label("Hourly", systemImage: "list.dash")}
+                            HourlyChartsWebView(htmlFilename: "HourlyCharts", ticker: stock.ticker, color: "true").frame(height:320).tabItem { Label("Hourly", systemImage: "list.dash")}
                             
-                            WebView(htmlFilename: "Charts", ticker: stock.ticker).frame(height: 320).tabItem { Label("Historical", systemImage: "list.dash")}
+                            ChartsWebView(htmlFilename: "Charts", ticker: stock.ticker).frame(height: 320).tabItem { Label("Historical", systemImage: "list.dash")}
                         }.frame(height: 320)
                     }
                     Section(header: Text("Portfolio").fontWeight(.semibold).font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading).padding()){
@@ -54,7 +54,7 @@ struct StockDetailsView: View {
                     }
                     Section(header: Text("News").fontWeight(.semibold).font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading).padding()){
                         ForEach(stockNewsResponse!,  id: \.id) { news in
-                            NewsArticleRow(article: news)
+                            NewsArticleRow(article: news).padding()
                         }
                     }
                     

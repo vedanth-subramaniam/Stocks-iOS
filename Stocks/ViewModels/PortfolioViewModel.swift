@@ -13,12 +13,18 @@ class PortfolioViewModel: ObservableObject {
     @Published var stockWalletBalance: StockWalletBalance?
     @Published var toastMessage = ""
     @Published var transactionMessage = ""
+    @Published var isLoadingHomePage: Bool = false
+
     
     func fetchPortfolioData() {
+        self.isLoadingHomePage = true
+        print("Fetching portfolio")
         ApiService.shared.fetchPortfolioData { [weak self] stocks, error in
             if let stocks = stocks {
                 DispatchQueue.main.async {
                     self?.portfolioStocks = stocks
+                    print("Still loader ahhhh")
+                    self?.isLoadingHomePage = false
                 }
             } else if let error = error {
                 print("Error fetching portfolio data: \(error.localizedDescription)")

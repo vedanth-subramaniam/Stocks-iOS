@@ -2,11 +2,12 @@
 <html>
 <head>
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<div id="chart-container" style="width: 100%; height: 100%;"></div>
+<div id="chart-container" style="width: 100%; height: 80%;"></div>
 <script>
-    function loadChartWithData(obj,"false"){
+    function loadChartWithData(obj,is_negative){
         fetch("https://csci-571-3550559665.wl.r.appspot.com/get_chart/"+obj)
                 .then(response => {
                     return response.json();

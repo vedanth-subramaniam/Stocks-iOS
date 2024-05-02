@@ -9,105 +9,111 @@ struct ContentView: View {
     @StateObject var portfolioViewModel = PortfolioViewModel()
     @StateObject var favoritesViewModel = FavoritesViewModel()
     @State var netWorth: Double = 21342.34
+    @State private var isLoading = true  // New state for loading indicator
     
     var body: some View {
         NavigationView {
-            List {
-                if searchText.isEmpty {
-                    
-                    Section(){
-                        HStack() {
-                            Text(currentDateString())
-                                .fontWeight(.bold)
-                                .font(.largeTitle)
-                                .foregroundColor(.gray)
-                        }
-                        .listRowBackground(Color.white)
-                    }
-                    
-                    Section(header: Text("PORTFOLIO").bold().font(.subheadline)) {
-                        HStack{
-                            PortfolioAccountRow(label: "Net Worth", value: netWorth)
-                            Spacer()
-                            PortfolioAccountRow(label: "Cash Balance", value: stockWalletBalance?.balance ?? 0)
-                        }
-                        ForEach(portfolioViewModel.portfolioStocks,  id: \.ticker) { stock in
-                            NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: stock.ticker))) {
-                                StockDetailsPortfolioRow(stock: stock)
-                            }
-                        }
-                        .onDelete(perform: deletePortfolioStock)
-                        .onMove(perform: movePortfolioStock)
-                    }
-                    
-                    Section(header: Text("FAVORITES").bold().font(.subheadline)) {
-                        ForEach(favoritesViewModel.favoriteStocks,  id: \.ticker) { stock in
-                            NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: stock.ticker))) {
-                                StockDetailsWishlistRow(stock: stock)
-                            }
-                        }
-                        .onDelete(perform: deleteFavoriteStock)
-                        .onMove(perform: moveFavoriteStock)
-                    }
-                    Section {
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                if let url = URL(string: "https://www.finnhub.io") {
-                                    UIApplication.shared.open(url)
+            VStack(){
+                if portfolioViewModel.isLoadingHomePage {
+                    ProgressView("Fetching Data...")
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .scaleEffect(1.5)
+                }
+                else {
+                    List{
+                        if searchText.isEmpty {
+                            
+                            Section(){
+                                HStack() {
+                                    Text(currentDateString())
+                                        .fontWeight(.bold)
+                                        .font(.largeTitle)
+                                        .foregroundColor(.gray)
                                 }
-                            }) {
-                                Text("Powered by Finnhub.io")
-                                    .foregroundColor(Color.gray)
-                                    .font(.subheadline)
+                                .listRowBackground(Color.white)
                             }
-                            Spacer()
-                        }
-                    }
-                    
-                } else {
-                    ForEach(autocompleteResults, id: \.symbol) { result in
-                        if (!result.symbol.contains(".")){
-                            HStack {
-                                NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: result.displaySymbol))){
-                                    VStack(alignment: .leading) {
-                                        Text(result.symbol)
-                                            .font(.headline)
-                                        Text(result.description)
+                            
+                            Section(header: Text("PORTFOLIO").bold().font(.subheadline)) {
+                                HStack{
+                                    PortfolioAccountRow(label: "Net Worth", value: netWorth)
+                                    Spacer()
+                                    PortfolioAccountRow(label: "Cash Balance", value: stockWalletBalance?.balance ?? 0)
+                                }
+                                ForEach(portfolioViewModel.portfolioStocks,  id: \.ticker) { stock in
+                                    NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: stock.ticker))) {
+                                        StockDetailsPortfolioRow(stock: stock)
+                                    }
+                                }
+                                .onDelete(perform: deletePortfolioStock)
+                                .onMove(perform: movePortfolioStock)
+                            }
+                            
+                            Section(header: Text("FAVORITES").bold().font(.subheadline)) {
+                                ForEach(favoritesViewModel.favoriteStocks,  id: \.ticker) { stock in
+                                    NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: stock.ticker))) {
+                                        StockDetailsWishlistRow(stock: stock)
+                                    }
+                                }
+                                .onDelete(perform: deleteFavoriteStock)
+                                .onMove(perform: moveFavoriteStock)
+                            }
+                            Section {
+                                HStack {
+                                    Spacer()
+                                    Button(action: {
+                                        if let url = URL(string: "https://www.finnhub.io") {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }) {
+                                        Text("Powered by Finnhub.io")
+                                            .foregroundColor(Color.gray)
                                             .font(.subheadline)
-                                            .foregroundColor(.secondary)
                                     }
                                     Spacer()
                                 }
                             }
+                            
+                        } else {
+                            ForEach(autocompleteResults, id: \.symbol) { result in
+                                if (!result.symbol.contains(".")){
+                                    HStack {
+                                        NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: result.displaySymbol))){
+                                            VStack(alignment: .leading) {
+                                                Text(result.symbol)
+                                                    .font(.headline)
+                                                Text(result.description)
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            Spacer()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    .navigationBarTitle(searchText.isEmpty ? "Stocks" : "")
+                    .navigationBarItems(trailing: searchText.isEmpty ? EditButton() : nil)
+                    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+                    .onChange(of: searchText) { newValue in
+                        if newValue.isEmpty {
+                            autocompleteResults = []
+                        } else {
+                            searchThrottleTimer?.invalidate()
+                            searchThrottleTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                                performSearch(query: newValue)
+                            }
                         }
                     }
                 }
-            }
-            .navigationBarTitle(searchText.isEmpty ? "Stocks" : "")
-            .navigationBarItems(trailing: searchText.isEmpty ? EditButton() : nil)
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-            .onChange(of: searchText) { newValue in
-                if newValue.isEmpty {
-                    autocompleteResults = []
-                } else {
-                    searchThrottleTimer?.invalidate()
-                    searchThrottleTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-                        performSearch(query: newValue)
-                    }
-                }
-            }
-            .onAppear(){
+            }.onAppear(){
                 portfolioViewModel.fetchPortfolioData()
                 favoritesViewModel.fetchFavoriteStocks()
                 fetchWalletBalance()
-            }.onReceive(Timer.publish(every: 10, on: .main, in: .common).autoconnect()) { _ in
-                portfolioViewModel.fetchPortfolioData()
-                favoritesViewModel.fetchFavoriteStocks()
             }
         }
     }
-    
     
     func deletePortfolioStock(at offsets: IndexSet) {
         portfolioViewModel.portfolioStocks.remove(atOffsets: offsets)

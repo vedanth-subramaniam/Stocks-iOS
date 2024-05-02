@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+<div id="chart-container" style="width: 100%; height: 100%;"></div>
+
+<script>
+    function loadChartWithData(obj){
+
+        fetch("https://csci-571-3550559665.wl.r.appspot.com/get_stock_earnings/"+obj)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json(); // Parse the response body as JSON
+                })
+                .then(data => {
+                    // Handle the JSON data
+                    console.log(data);
+                    let actual_data = [],
+                        estimate_data = [],
+                        periods = [],
+                        surprises = [];
+                        data.earnings.map((rec) => {
+                        actual_data.push(rec.actual == null ? 0 : rec.actual);
+                        estimate_data.push(rec.estimate == null ? 0 : rec.estimate);
+                        periods.push(rec.period);
+                        surprises.push("Surprise : " + rec.surprise.toString());
+                        });
+
+                    Highcharts.chart('chart-container',{
+                    chart: {
+                        backgroundColor: "#f7f6f7",
+                        type: "spline",
+                    },
+                    title: {
+                        text: "Historical EPS Surprises",
+                    },
+                    xAxis: [
+                        {
+                        categories: periods,
+                        },
+                        {
+                        categories: surprises,
+                        offset: 70,
+                        linkedTo: 0,
+                        opposite: false,
+                        labels: { y: -14 },
+                        },
+                    ],
+                    yAxis: {
+                        title: {
+                        text: "Quarterly EPS",
+                        },
+                    },
+                    tooltip: {
+                        shared: true,
+                    },
+                    series: [
+                        {
+                        name: "Actual",
+                        data: actual_data,
+                        },
+                        {
+                        name: "Estimate",
+                        data: estimate_data,
+                        },
+                    ],
+                    });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching data:', error);
+                            });
+
+                    let recommendation_data = JSON.parse(obj);
+        // Sample Highcharts configuration
+    }
+</script>
+</body>
+</html>
+

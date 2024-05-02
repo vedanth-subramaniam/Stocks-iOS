@@ -33,6 +33,7 @@ struct NewsArticleRow: View {
                         .foregroundColor(.primary)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                 }
+                Spacer()
                 AsyncImage(url: URL(string: article.image)) { image in
                     image.resizable()
                 } placeholder: {

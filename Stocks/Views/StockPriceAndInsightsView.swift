@@ -92,7 +92,9 @@ struct StockPriceAndInsightsView: View {
                                 HStack(spacing: 10) {
                                     ForEach(stockSummaryResponse?.companyPeers ?? [], id: \.self) { peer in
                                         NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: peer))) {
-                                            Text(peer + ", ").foregroundColor(.blue)
+                                            Text(peer + ", ")
+                                                .foregroundColor(.blue)
+                                                .font(.system(size: 12))
                                         }
                                     }.frame(alignment: .leading)
                                 }
@@ -106,7 +108,7 @@ struct StockPriceAndInsightsView: View {
                     Text("Insider Sentiments").font(.title2)
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(stockProfile?.name ?? "No Value")
+                            Text(stockProfile?.name ?? "No Value").frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             Divider()
                             Text("Total").font(.headline)
                             Divider()
@@ -117,30 +119,43 @@ struct StockPriceAndInsightsView: View {
                         }
                         Spacer()
                         VStack(alignment: .leading) {
-                            Text("MSPR").font(.headline)
+                            Text("MSPR").font(.headline).frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             Divider()
                             Text(String(format: "%.2f", self.averageMspr))
+                                .font(.system(size: 15))
+
                             Divider()
                             Text(String(format: "%.2f", self.averagePositiveMspr))
+                                .font(.system(size: 15))
+
                             Divider()
                             Text(String(format: "%.2f", self.averageNegativeMspr))
+                                .font(.system(size: 15))
+
                             Divider()
                         }
                         Spacer()
                         VStack(alignment: .leading) {
-                            Text("Change").font(.headline)
+                            Text("Change").font(.headline).frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             Divider()
                             Text(String(format: "%.2f", self.averageChange))
+                                .font(.system(size: 15))
+
                             Divider()
                             Text(String(format: "%.2f", self.averagePositiveChange))
+                                .font(.system(size: 15))
+
                             Divider()
                             Text(String(format: "%.2f", self.averageNegativeChange))
+                                .font(.system(size: 15))
+
                             Divider()
                         }
                         Spacer()
-                    }.padding()
+                    }
                 }
-                
+                ChartsWebView(htmlFilename: "RecommendationChart", ticker: stockProfile?.ticker ?? "AAPL").frame(height:200)
+                ChartsWebView(htmlFilename: "SurpriseChart", ticker: stockProfile?.ticker ?? "AAPL").frame(height:320)
             }
         }
         .padding()
@@ -165,44 +180,34 @@ struct StockPriceAndInsightsView: View {
         var totalMspr: Double = 0
         var totalPositiveMspr: Double = 0
         var totalNegativeMspr: Double = 0
-        var countPositiveMspr = 0
-        var countNegativeMspr = 0
         
         var totalChange: Double = 0
         var totalPositiveChange: Double = 0
         var totalNegativeChange: Double = 0
-        var countPositiveChange = 0
-        var countNegativeChange = 0
         
         for sentiment in data {
-            // Sum MSPRs
             totalMspr += sentiment.mspr
             if sentiment.mspr > 0 {
                 totalPositiveMspr += sentiment.mspr
-                countPositiveMspr += 1
             } else {
                 totalNegativeMspr += sentiment.mspr
-                countNegativeMspr += 1
             }
             
-            // Sum Changes
             totalChange += Double(sentiment.change)
             if sentiment.change > 0 {
                 totalPositiveChange += Double(sentiment.change)
-                countPositiveChange += 1
             } else {
                 totalNegativeChange += Double(sentiment.change)
-                countNegativeChange += 1
             }
         }
         
         // Compute averages
-        averageMspr = totalMspr / Double(data.count)
-        averagePositiveMspr = countPositiveMspr > 0 ? totalPositiveMspr / Double(countPositiveMspr) : 0
-        averageNegativeMspr = countNegativeMspr > 0 ? totalNegativeMspr / Double(countNegativeMspr) : 0
-        averageChange = totalChange / Double(data.count)
-        averagePositiveChange = countPositiveChange > 0 ? totalPositiveChange / Double(countPositiveChange) : 0
-        averageNegativeChange = countNegativeChange > 0 ? totalNegativeChange / Double(countNegativeChange) : 0
+        averageMspr = totalMspr
+        averagePositiveMspr =  totalPositiveMspr
+        averageNegativeMspr = totalNegativeMspr
+        averageChange = totalChange
+        averagePositiveChange = totalPositiveChange
+        averageNegativeChange = totalNegativeChange
         
         // Print results
         print("Average MSPR: \(averageMspr)")

@@ -20,6 +20,7 @@
 		0C39062C2BD74AEC00060EE0 /* StockSummaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C39062B2BD74AEC00060EE0 /* StockSummaryModel.swift */; };
 		0C7820012BE2AED4003A4E22 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C7820002BE2AED4003A4E22 /* Launch Screen.storyboard */; };
 		0C9CF11C2BE33CC000870C8A /* RecommendationChart.html in Resources */ = {isa = PBXBuildFile; fileRef = 0C9CF11B2BE33CC000870C8A /* RecommendationChart.html */; };
+		0C9CF1202BE36C9E00870C8A /* SurpriseChart.html in Resources */ = {isa = PBXBuildFile; fileRef = 0C9CF11F2BE36C9E00870C8A /* SurpriseChart.html */; };
 		0CBD5F332BD4B8DD00B7A256 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0CBD5F322BD4B8DD00B7A256 /* Alamofire */; };
 		0CBD5F372BD4BDC200B7A256 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD5F362BD4BDC200B7A256 /* ApiService.swift */; };
 		0CBD5F392BD4C1A400B7A256 /* PortfolioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD5F382BD4C1A400B7A256 /* PortfolioViewModel.swift */; };
@@ -71,6 +72,7 @@
 		0C39062B2BD74AEC00060EE0 /* StockSummaryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockSummaryModel.swift; sourceTree = "<group>"; };
 		0C7820002BE2AED4003A4E22 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		0C9CF11B2BE33CC000870C8A /* RecommendationChart.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = RecommendationChart.html; sourceTree = "<group>"; };
+		0C9CF11F2BE36C9E00870C8A /* SurpriseChart.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SurpriseChart.html; sourceTree = "<group>"; };
 		0CBD5F362BD4BDC200B7A256 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		0CBD5F382BD4C1A400B7A256 /* PortfolioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewModel.swift; sourceTree = "<group>"; };
 		0CBD5F3C2BD4C21200B7A256 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				0CC463692BE1FD740042A925 /* ToastView.swift */,
 				0C19E10A2BE23EDD0059BF29 /* HourlyCharts.html */,
 				0C9CF11B2BE33CC000870C8A /* RecommendationChart.html */,
+				0C9CF11F2BE36C9E00870C8A /* SurpriseChart.html */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C9CF11C2BE33CC000870C8A /* RecommendationChart.html in Resources */,
+				0C9CF1202BE36C9E00870C8A /* SurpriseChart.html in Resources */,
 				0C19E10B2BE23EDD0059BF29 /* HourlyCharts.html in Resources */,
 				0C1A9C272BCB97CC00B8E98D /* Preview Assets.xcassets in Resources */,
 				0C1A9C242BCB97CC00B8E98D /* Assets.xcassets in Resources */,
