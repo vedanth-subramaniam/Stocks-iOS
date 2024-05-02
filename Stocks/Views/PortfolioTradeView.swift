@@ -15,10 +15,12 @@ struct PortfolioView: View {
     var body: some View {
         HStack() {
             if let quantity = portfolioViewModel.portfolioRecord?.quantity, quantity > 0{
-                VStack(alignment:.leading) {
+                VStack(alignment:.leading, spacing: 10) {
                     HStack {
                         Text("Shares Owned:")
                             .fontWeight(.semibold)
+                            .font(.system(size: 15))
+                        
                         Spacer()
                         Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.quantity ?? 0))
                     }
@@ -26,28 +28,35 @@ struct PortfolioView: View {
                     HStack {
                         Text("Avg. Cost / Share:")
                             .fontWeight(.semibold)
+                            .font(.system(size: 13.5))
+                            .lineLimit(1)
                         Spacer()
-                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.averagePrice ?? 0))
+                        Text("$" + String(format: "%.2f", portfolioViewModel.portfolioRecord?.averagePrice ?? 0))
                     }
                     
                     HStack {
                         Text("Total Cost:")
                             .fontWeight(.semibold)
+                            .font(.system(size: 15))
                         Spacer()
-                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.totalCost ?? 0))
+                        Text("$" + String(format: "%.2f", portfolioViewModel.portfolioRecord?.totalCost ?? 0))
                     }
                     
                     HStack {
                         Text("Change:")
                             .fontWeight(.semibold)
+                            .font(.system(size: 15))
+
                         Spacer()
-                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.changePrice ?? 0))                                        }
+                        Text("$" + String(format: "%.2f", portfolioViewModel.portfolioRecord?.changePrice ?? 0))
+                        }
                     
                     HStack {
                         Text("Market Value:")
                             .fontWeight(.semibold)
+                            .font(.system(size: 15))
                         Spacer()
-                        Text(String(format: "%.2f", portfolioViewModel.portfolioRecord?.marketValue ?? 0))                        .fontWeight(.bold)
+                        Text("$" + String(format: "%.2f", portfolioViewModel.portfolioRecord?.marketValue ?? 0))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -72,7 +81,7 @@ struct PortfolioView: View {
                     TradeSheetView(portfolioViewModel: portfolioViewModel)
                 }
         }
-        .padding()
+        .padding(.horizontal)
         .background(Color.white)
         .cornerRadius(12)
         .onAppear(){
@@ -218,5 +227,5 @@ struct SuccessModalView: View {
 
 
 #Preview {
-    PortfolioView(stock:StockTicker(ticker: "GOOGL"))
+    PortfolioView(stock:StockTicker(ticker: "TSLA"))
 }

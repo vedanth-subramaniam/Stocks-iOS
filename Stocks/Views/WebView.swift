@@ -34,7 +34,7 @@ struct WebView: UIViewRepresentable {
             print(jsCode)
             webView.evaluateJavaScript(jsCode, completionHandler: { (result, error) in
                 if let result = result {
-                    print(jsCode)
+                    print(result)
                     print("HEY")
                 }
                 if let error = error {
@@ -46,5 +46,5 @@ struct WebView: UIViewRepresentable {
 }
 
 #Preview {
-    WebView(htmlFilename: "Charts", ticker: "TSLA")
+    WebView(htmlFilename: "HourlyCharts", ticker: "TSLA")
 }

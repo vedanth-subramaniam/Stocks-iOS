@@ -49,6 +49,21 @@ struct ContentView: View {
                         .onDelete(perform: deleteFavoriteStock)
                         .onMove(perform: moveFavoriteStock)
                     }
+                    Section {
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                if let url = URL(string: "https://www.finnhub.io") {
+                                    UIApplication.shared.open(url)
+                                }
+                            }) {
+                                Text("Powered by Finnhub.io")
+                                    .foregroundColor(Color.gray)
+                                    .font(.subheadline)
+                            }
+                            Spacer()
+                        }
+                    }
                     
                 } else {
                     ForEach(autocompleteResults, id: \.symbol) { result in

@@ -40,74 +40,67 @@ struct StockPriceAndInsightsView: View {
     @State private var averageNegativeChange:Double = 0;
     
     var body: some View {
-        VStack(){
+        VStack(spacing: 20){
             Section(header: Text("Stats").frame(maxWidth:.infinity,alignment: .leading).font(.title2)) {
-                HStack(){
-                    Text("High Price")
-                    Text(String(format: "$%.2f", latestPrice?.h ?? 0))
-                    Spacer()
-                    Text("Open Price")
-                    Text(String(format: "$%.2f", latestPrice?.o ?? 0))
-                }
-                HStack(){
-                    Text("Low Price")
-                    Text(String(format: "$%.2f", latestPrice?.h ?? 0))
-                    Spacer()
-                    Text("Prev. Close")
-                    Text(String(format: "$%.2f", latestPrice?.o ?? 0))
-                }
-                Spacer()
+                VStack(spacing: 10){
+                    HStack(){
+                        Text("High Price").bold()
+                        Text(String(format: "$%.2f", latestPrice?.h ?? 0))
+                        Spacer()
+                        Text("Open Price").bold()
+                        Text(String(format: "$%.2f", latestPrice?.o ?? 0))
+                    }
+                    HStack(){
+                        Text("Low Price").bold()
+                        Text(String(format: "$%.2f", latestPrice?.h ?? 0))
+                        Spacer()
+                        Text("Prev. Close").bold()
+                        Text(String(format: "$%.2f", latestPrice?.o ?? 0))
+                    }
+                }.font(.system(size: 18))
+                
             }
-            Spacer()
             Section(header: Text("About").frame(maxWidth: .infinity, alignment: .leading).font(.title2)) {
                 if let profile = stockProfile {
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
-                            Text("IPO Start Date:")
-                            Spacer()
+                            Text("IPO Start Date:").frame(width: 200, alignment: .leading)
                             Text(profile.ipo ?? "")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.gray).frame(alignment: .leading).bold()
                         }
                         
                         HStack {
-                            Text("Industry:")
-                            Spacer()
+                            Text("Industry:").frame(width: 200, alignment: .leading)
                             Text(profile.finnhubIndustry ?? "")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.gray).frame(alignment: .leading).bold()
                         }
                         
                         HStack {
-                            Text("Webpage:")
-                            Spacer()
+                            Text("Webpage:").frame(width: 200, alignment: .leading)
                             Link(destination: profile.weburl) {
                                 Text(profile.weburl.absoluteString)
-                                    .foregroundColor(.blue)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.blue).frame(alignment: .leading).lineLimit(1)
                             }
                         }
                         
                         HStack {
-                            Text("Company Peers:")
-                            Spacer()
+                            Text("Company Peers:").frame(width: 200, alignment: .leading)
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 
                                 HStack(spacing: 10) {
                                     ForEach(stockSummaryResponse?.companyPeers ?? [], id: \.self) { peer in
                                         NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: peer))) {
-                                            Text(peer)
+                                            Text(peer + ", ").foregroundColor(.blue)
                                         }
-                                    }
+                                    }.frame(alignment: .leading)
                                 }
                             }
                         }
                     }
-                    
-                } else {
-                    Text("No company profile available.")
                 }
-                Spacer()
             }
-            Spacer()
             Section(header: Text("Insights").frame(maxWidth:.infinity,alignment: .leading).font(.title2)){
                 VStack(alignment: .center, spacing: 8) {
                     Text("Insider Sentiments").font(.title2)
@@ -147,7 +140,7 @@ struct StockPriceAndInsightsView: View {
                         Spacer()
                     }.padding()
                 }
-
+                
             }
         }
         .padding()

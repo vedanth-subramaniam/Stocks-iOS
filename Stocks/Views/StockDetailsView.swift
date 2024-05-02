@@ -22,7 +22,7 @@ struct StockDetailsView: View {
     @StateObject var favouriteModel = FavoritesViewModel()
     @State private var showingToast = false
     @State private var toastMessage = ""
-
+    
     
     
     var body: some View {
@@ -57,6 +57,7 @@ struct StockDetailsView: View {
                             NewsArticleRow(article: news)
                         }
                     }
+                    
                 }
             }
             
@@ -188,11 +189,10 @@ struct StockBasicDetailsView: View {
     var stockSummaryResponse: StockSummaryResponse?
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(stock.ticker)
                 .font(.title)
                 .bold()
-                .lineSpacing(/*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
             Text(stockSummaryResponse?.stockProfile.name ?? "Loading Name...")
                 .font(.title3)
                 .foregroundColor(.gray)

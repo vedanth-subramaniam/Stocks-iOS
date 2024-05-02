@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+<div id="chart-container" style="width: 100%; height: 100%;"></div>
+
+<script>
+
+    function loadChartWithData(obj){
+
+        fetch("https://csci-571-3550559665.wl.r.appspot.com/get_recommendation/"+obj)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json(); // Parse the response body as JSON
+                })
+                .then(data => {
+                    // Handle the JSON data
+                    console.log(data);
+                    alert(data)
+
+                    let recommendation_data = data['recommendation'];
+
+                    // Display the data on the webpage
+                    Highcharts.chart('chart-container',{
+                    chart: {
+                        type: "column",
+                        backgroundColor: "#f7f6f7",
+                    },
+                    title: {
+                        text: "Recommendation Trends",
+                        align: "center",
+                    },
+                    xAxis: {
+                        categories: recommendation_data.map((rec) => rec.period),
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                        text: "# Analysis",
+                        },
+                        stackLabels: {
+                        enabled: false,
+                        },
+                    },
+                    plotOptions: {
+                        column: {
+                        stacking: "normal",
+                        dataLabels: {
+                            enabled: true,
+                        },
+                        },
+                    },
+                    series: [
+                        {
+                        name: "Strong Buy",
+                        data: recommendation_data.map((rec) => rec.strongBuy),
+                        color: "#1a6334",
+                        },
+                        {
+                        name: "Buy",
+                        data: recommendation_data.map((rec) => rec.buy),
+                        color: "#22ae50",
+                        },
+                        {
+                        name: "Hold",
+                        data: recommendation_data.map((rec) => rec.hold),
+                        color: "#ae7c27",
+                        },
+                        {
+                        name: "Sell",
+                        data: recommendation_data.map((rec) => rec.sell),
+                        color: "#f04e53",
+                        },
+                        {
+                        name: "Strong Sell",
+                        data: recommendation_data.map((rec) => rec.strongSell),
+                        color: "#752a2a",
+                        },
+                    ],
+                    });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching data:', error);
+                            });
+
+                    let recommendation_data = JSON.parse(obj);
+        // Sample Highcharts configuration
+    }
+</script>
+</body>
+</html>

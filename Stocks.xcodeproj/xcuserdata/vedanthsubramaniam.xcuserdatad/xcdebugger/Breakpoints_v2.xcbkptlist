@@ -7,22 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0F5EA562-3481-4CD4-BA12-1EAD4D590715"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Stocks/Views/NewsView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "NewsDetailView"
-            landmarkType = "14">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "ACF17315-4772-48CC-A695-3C0126051655"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -30,8 +14,8 @@
             filePath = "Stocks/Views/ContentView.swift"
             startingColumnNumber = "22"
             endingColumnNumber = "22"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
