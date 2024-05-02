@@ -14,6 +14,7 @@ class PortfolioViewModel: ObservableObject {
     @Published var toastMessage = ""
     @Published var transactionMessage = ""
     @Published var isLoadingHomePage: Bool = false
+    @Published var netWorth: Double = 25000
 
     
     func fetchPortfolioData() {
@@ -23,7 +24,7 @@ class PortfolioViewModel: ObservableObject {
             if let stocks = stocks {
                 DispatchQueue.main.async {
                     self?.portfolioStocks = stocks
-                    print("Still loader ahhhh")
+                    self?.calculateNetWorth()
                     self?.isLoadingHomePage = false
                 }
             } else if let error = error {
@@ -160,6 +161,11 @@ class PortfolioViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.toastMessage = message
         }
+    }
+    
+    private func calculateNetWorth() {
+        let stocksValue = portfolioStocks.reduce(0) { $0 + $1.marketValue }
+        netWorth = stockWalletBalance?.balance ?? 25000 + stocksValue
     }
 
 }

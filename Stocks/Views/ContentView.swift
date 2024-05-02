@@ -8,7 +8,6 @@ struct ContentView: View {
     @State var stockWalletBalance: StockWalletBalance?
     @StateObject var portfolioViewModel = PortfolioViewModel()
     @StateObject var favoritesViewModel = FavoritesViewModel()
-    @State var netWorth: Double = 21342.34
     @State private var isLoading = true  // New state for loading indicator
     
     var body: some View {
@@ -35,7 +34,7 @@ struct ContentView: View {
                             
                             Section(header: Text("PORTFOLIO").bold().font(.subheadline)) {
                                 HStack{
-                                    PortfolioAccountRow(label: "Net Worth", value: netWorth)
+                                    PortfolioAccountRow(label: "Net Worth", value: portfolioViewModel.netWorth)
                                     Spacer()
                                     PortfolioAccountRow(label: "Cash Balance", value: stockWalletBalance?.balance ?? 0)
                                 }
