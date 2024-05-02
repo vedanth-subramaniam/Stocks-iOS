@@ -123,7 +123,13 @@ struct ContentView: View {
     }
     
     func deleteFavoriteStock(at offsets: IndexSet) {
-        favoritesViewModel.favoriteStocks.remove(atOffsets: offsets)
+        for index in offsets {
+            if index < favoritesViewModel.favoriteStocks.count {
+                let ticker = favoritesViewModel.favoriteStocks[index].ticker
+                favoritesViewModel.favoriteStocks.remove(at: index)
+                favoritesViewModel.removeFromFavourites(ticker: ticker)
+            }
+        }
     }
     
     func moveFavoriteStock(from source: IndexSet, to destination: Int) {
