@@ -123,7 +123,7 @@ class PortfolioViewModel: ObservableObject {
             print("Updated portfolio Record")
             updatePortfolioRecord(portfolioRecord: StockPortfolioDb(ticker: portfolioRecord?.ticker ?? "", quantity: portfolioRecord?.quantity ?? 0, totalCost: portfolioRecord?.totalCost ?? 0))
             print(portfolioRecord)
-            transactionMessage = "You have successfully bought " + String(format:"%.0f", count) + " shares of AAPL"
+            transactionMessage = "You have successfully bought " + String(format:"%.0f", count) + " shares of " + (portfolioRecord?.ticker ?? "AAPL")
         } else {
             showToast(message: "Not enough money to buy")
         }
@@ -151,7 +151,7 @@ class PortfolioViewModel: ObservableObject {
             print(portfolioRecord)
             updatePortfolioRecord(portfolioRecord: StockPortfolioDb(ticker: portfolioRecord?.ticker ?? "", quantity: portfolioRecord?.quantity ?? 0, totalCost: portfolioRecord?.totalCost ?? 0))
             updateWalletBalance()
-            transactionMessage = "You have successfully sold " + String(format:"%.0f", count) + " shares of AAPL"
+            transactionMessage = "You have successfully sold " + String(format:"%.0f", count) + " shares of " + (portfolioRecord?.ticker ?? "AAPL")
         } else {
             showToast(message: "Not enough shares to sell")
         }

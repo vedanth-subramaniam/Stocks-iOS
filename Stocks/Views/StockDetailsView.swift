@@ -35,26 +35,38 @@ struct StockDetailsView: View {
                 ScrollView{
                     Section(){
                         StockBasicDetailsView(stock: stock, stockSummaryResponse: self.stockSummaryResponse)
-                            .padding([.top, .horizontal])
-                    }
+                            
+                    }.padding()
                     
                     Section(){
                         TabView{
-                            HourlyChartsWebView(htmlFilename: "HourlyCharts", ticker: stock.ticker, color: "true").frame(width: 390).frame(height:420).tabItem { Label("Hourly", systemImage: "chart.line.uptrend.xyaxis")}
+                            HourlyChartsWebView(htmlFilename: "HourlyCharts", ticker: stock.ticker, color: "false").frame(width: 390).frame(height:420).tabItem { Label("Hourly", systemImage: "chart.line.uptrend.xyaxis")}
                             
                             ChartsWebView(htmlFilename: "Charts", ticker: stock.ticker).frame(width: 400).frame(height: 390).tabItem { Label("Historical", systemImage: "clock")}
                         }.frame(height: 450)
                     }
                     Section(header: Text("Portfolio").fontWeight(.semibold).font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading).padding()){
                         PortfolioView(stock:stock)
-                    }
+                    }.padding(.horizontal)
                     
                     Section(){
                         StockPriceAndInsightsView(stockSummaryResponse: stockSummaryResponse, stockInsightsResponse: stockInsightsResponse)
-                    }
-                    Section(header: Text("News").fontWeight(.semibold).font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading).padding()){
-                        ForEach(stockNewsResponse!,  id: \.id) { news in
-                            NewsArticleRow(article: news).padding()
+                    }.padding(.horizontal)
+                    Section() {
+                        VStack(){
+                            Text("News")
+                                .fontWeight(.semibold)
+                                .font(.title)
+                                .padding(.horizontal, 30)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            if let news = stockNewsResponse, !news.isEmpty {
+                                FirstNewsArticleRow(article: news.first!)
+                                    .padding()
+                                ForEach(Array(news.dropFirst().enumerated()), id: \.element.id) { index, article in
+                                    NewsArticleRow(article: article).padding()
+                                    
+                                }
+                            }
                         }
                     }
                     
@@ -202,13 +214,13 @@ struct StockBasicDetailsView: View {
                     .bold()
                 Spacer()
                 HStack(spacing: 2) {
-                    Text(String(format: "$%.2f", stockSummaryResponse?.latestPrice.dp ?? 0))
-                    Text(String(format: "(%.2f%%)", stockSummaryResponse?.latestPrice.pc ?? 0))
+                    Text(String(format: "$%.2f", stockSummaryResponse?.latestPrice.d ?? 0))
+                    Text(String(format: "(%.2f%%)", stockSummaryResponse?.latestPrice.dp ?? 0))
                 }
-                .foregroundColor((stockSummaryResponse?.latestPrice.pc ?? 0) < 0 ? .red : .green)
+                .foregroundColor((stockSummaryResponse?.latestPrice.dp ?? 0) < 0 ? .red : .green)
                 .font(.title2)
             }
-        }
+        }.padding()
     }
 }
 

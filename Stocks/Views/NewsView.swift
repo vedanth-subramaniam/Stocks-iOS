@@ -41,7 +41,81 @@ struct NewsArticleRow: View {
                 }
                 .frame(width: 120, height: 90) // Adjusted size
                 .cornerRadius(10)
-                .padding(.trailing, 8)
+            }
+        }.padding()
+        .sheet(isPresented: $showingNewsDetailsSheet) {
+            NewsDetailView(news: article)
+        }
+    }
+    
+    func timeAgo(from datetime: TimeInterval) -> String {
+        let publicationDate = Date(timeIntervalSince1970: datetime)
+        let currentDate = Date()
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: publicationDate, to: currentDate)
+        
+        let year = components.year ?? 0
+        let month = components.month ?? 0
+        let day = components.day ?? 0
+        let hour = components.hour ?? 0
+        let minute = components.minute ?? 0
+        
+        if year > 0 {
+            return "\(year) year\(year > 1 ? "s" : "") ago"
+        } else if month > 0 {
+            return "\(month) month\(month > 1 ? "s" : "") ago"
+        } else if day > 0 {
+            return "\(day) day\(day > 1 ? "s" : "") ago"
+        } else if hour > 0 {
+            return "\(hour) hour\(hour > 1 ? "s" : "") ago"
+        } else if minute > 0 {
+            return "\(minute) minute\(minute > 1 ? "s" : "") ago"
+        } else {
+            return "Just now"
+        }
+    }
+    
+}
+
+struct FirstNewsArticleRow: View {
+    var article: NewsArticle
+    @State private var showingNewsDetailsSheet = false
+    
+    var body: some View {
+        Button(action: {
+            showingNewsDetailsSheet.toggle()
+        }) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    AsyncImage(url: URL(string: article.image)) { image in
+                        image.resizable()
+                             .aspectRatio(contentMode: .fill)
+                    } placeholder: {
+                        Color.gray
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 200)
+                    .cornerRadius(10)
+                    .clipped()
+                    .padding()
+                    
+                    HStack(){
+                        Text(article.source)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
+                        Text(timeAgo(from: article.datetime))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }.frame(alignment: .leading).padding(.horizontal)
+                    
+                    Text(article.headline)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .lineLimit(2)
+                        .foregroundColor(.primary)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/).padding(.horizontal)
+                }
+                Spacer()
             }
         }
         .sheet(isPresented: $showingNewsDetailsSheet) {
@@ -76,7 +150,6 @@ struct NewsArticleRow: View {
     }
     
 }
-
 
 struct NewsDetailView: View {
     let news: NewsArticle

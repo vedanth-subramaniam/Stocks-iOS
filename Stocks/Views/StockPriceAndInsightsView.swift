@@ -154,8 +154,8 @@ struct StockPriceAndInsightsView: View {
                         Spacer()
                     }
                 }
-                ChartsWebView(htmlFilename: "RecommendationChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
-                ChartsWebView(htmlFilename: "SurpriseChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
+//                ChartsWebView(htmlFilename: "RecommendationChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
+//                ChartsWebView(htmlFilename: "SurpriseChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
             }
         }
         .padding()

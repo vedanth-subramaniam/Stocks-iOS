@@ -84,7 +84,7 @@ struct PortfolioView: View {
                     TradeSheetView(portfolioViewModel: portfolioViewModel)
                 }
         }
-        .padding(.horizontal)
+        .padding()
         .background(Color.white)
         .cornerRadius(12)
         .onAppear(){
