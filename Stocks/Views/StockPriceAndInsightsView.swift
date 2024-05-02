@@ -79,7 +79,7 @@ struct StockPriceAndInsightsView: View {
                             Text("Webpage:").frame(width: 200, alignment: .leading)
                             Link(destination: profile.weburl) {
                                 Text(profile.weburl.absoluteString)
-                                    .font(.system(size: 12))
+                                    .font(.system(size: 13))
                                     .foregroundColor(.blue).frame(alignment: .leading).lineLimit(1)
                             }
                         }
@@ -92,7 +92,7 @@ struct StockPriceAndInsightsView: View {
                                 HStack(spacing: 10) {
                                     ForEach(stockSummaryResponse?.companyPeers ?? [], id: \.self) { peer in
                                         NavigationLink(destination: StockDetailsView(stock: StockTicker(ticker: peer))) {
-                                            Text(peer + ", ")
+                                            Text(peer + ",")
                                                 .foregroundColor(.blue)
                                                 .font(.system(size: 12))
                                         }
@@ -154,8 +154,8 @@ struct StockPriceAndInsightsView: View {
                         Spacer()
                     }
                 }
-                ChartsWebView(htmlFilename: "RecommendationChart", ticker: stockProfile?.ticker ?? "AAPL").frame(height:200)
-                ChartsWebView(htmlFilename: "SurpriseChart", ticker: stockProfile?.ticker ?? "AAPL").frame(height:320)
+                ChartsWebView(htmlFilename: "RecommendationChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
+                ChartsWebView(htmlFilename: "SurpriseChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
             }
         }
         .padding()

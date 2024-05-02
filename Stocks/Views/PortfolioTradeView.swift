@@ -46,10 +46,11 @@ struct PortfolioView: View {
                         Text("Change:")
                             .fontWeight(.semibold)
                             .font(.system(size: 15))
-
+                        
                         Spacer()
-                        Text("$" + String(format: "%.2f", portfolioViewModel.portfolioRecord?.changePrice ?? 0))
-                        }
+                        Text("$" + String(format: "%.2f", portfolioViewModel.portfolioRecord?.changePrice ?? 0))                       .foregroundColor(portfolioViewModel.portfolioRecord?.isPositive ?? true ? .green : .red)
+
+                    }
                     
                     HStack {
                         Text("Market Value:")
@@ -57,6 +58,8 @@ struct PortfolioView: View {
                             .font(.system(size: 15))
                         Spacer()
                         Text("$" + String(format: "%.2f", portfolioViewModel.portfolioRecord?.marketValue ?? 0))
+                            .foregroundColor(portfolioViewModel.portfolioRecord?.isPositive ?? true ? .green : .red)
+
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -160,10 +163,9 @@ struct TradeSheetView: View {
                 .animation(.easeInOut, value: showingToast)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 .padding(.bottom),
-            alignment: .bottom  // Align the overlay itself to the bottom
+            alignment: .bottom
         )
         .sheet(isPresented: $showSuccessModal) {
-            // This is the custom modal view, adjust as necessary
             SuccessModalView(message: transactionMessage, show: $showSuccessModal)
         }        .onReceive(portfolioViewModel.$toastMessage, perform: { newMessage in
             if !newMessage.isEmpty {
@@ -201,22 +203,36 @@ struct SuccessModalView: View {
     @Binding var show: Bool
     
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
+            
+            Spacer()
+            
             Text("Congratulations!")
-                .font(.largeTitle)
+                .font(.system(size: 40))
                 .fontWeight(.bold)
             
             Text(message)
                 .multilineTextAlignment(.center)
                 .font(.headline)
-                .fontWeight(.bold)
-            Button("Done") {
-                show = false // This will dismiss the modal
-            }
-            .foregroundColor(.white)
-            .padding()
-            .background(Color.green)
-            .cornerRadius(20)
+                .fontWeight(.semibold)
+            
+            Spacer()
+            
+            Button(action: {
+                // Action for the button
+                show = false
+                print("Done button pressed")
+            }) {
+                Text("Done")
+                    .fontWeight(.semibold)
+                    .foregroundColor(.green)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(25)
+                    .padding(.horizontal)
+                    .shadow(color: Color.green.opacity(0.3), radius: 10, x: 0, y: 10)
+            }.padding(.vertical, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.green)

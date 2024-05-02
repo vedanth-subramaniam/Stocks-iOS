@@ -40,10 +40,10 @@ struct StockDetailsView: View {
                     
                     Section(){
                         TabView{
-                            HourlyChartsWebView(htmlFilename: "HourlyCharts", ticker: stock.ticker, color: "true").frame(height:320).tabItem { Label("Hourly", systemImage: "list.dash")}
+                            HourlyChartsWebView(htmlFilename: "HourlyCharts", ticker: stock.ticker, color: "true").frame(width: 390).frame(height:420).tabItem { Label("Hourly", systemImage: "chart.line.uptrend.xyaxis")}
                             
-                            ChartsWebView(htmlFilename: "Charts", ticker: stock.ticker).frame(height: 320).tabItem { Label("Historical", systemImage: "list.dash")}
-                        }.frame(height: 320)
+                            ChartsWebView(htmlFilename: "Charts", ticker: stock.ticker).frame(width: 400).frame(height: 390).tabItem { Label("Historical", systemImage: "clock")}
+                        }.frame(height: 450)
                     }
                     Section(header: Text("Portfolio").fontWeight(.semibold).font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading).padding()){
                         PortfolioView(stock:stock)
