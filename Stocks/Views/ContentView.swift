@@ -8,8 +8,7 @@ struct ContentView: View {
     @State var stockWalletBalance: StockWalletBalance?
     @StateObject var portfolioViewModel = PortfolioViewModel()
     @StateObject var favoritesViewModel = FavoritesViewModel()
-    @State private var isLoading = true  // New state for loading indicator
-    
+    @State private var isLoading = true    
     var body: some View {
         NavigationView {
             VStack(){
@@ -210,7 +209,7 @@ struct StockDetailsPortfolioRow: View {
                         .foregroundColor(stock.isPositive ? .green : .red)
                     Text("(" + stock.changePricePercent + ")")
                         .foregroundColor(stock.isPositive ? .green : .red)
-                }
+                }.font(.system(size: 18))
             }
         }.font(.title3)
     }
@@ -239,9 +238,9 @@ struct StockDetailsWishlistRow: View {
                         .foregroundColor(stock.isPositive ? .green : .red)
                     Text(String(format: "%.2f", stock.changePrice))
                         .foregroundColor(stock.isPositive ? .green : .red)
-                    Text("(" + stock.changePricePercent + ")")
+                    Text("(" + stock.changePricePercent + ")").lineLimit(1)
                         .foregroundColor(stock.isPositive ? .green : .red)
-                }
+                }.font(.system(size: 18))
             }
         }.font(.title3)
     }

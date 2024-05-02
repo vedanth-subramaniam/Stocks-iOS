@@ -41,7 +41,7 @@ struct StockPriceAndInsightsView: View {
     
     var body: some View {
         VStack(spacing: 20){
-            Section(header: Text("Stats").frame(maxWidth:.infinity,alignment: .leading).font(.title2)) {
+            Section(header: Text("Stats").frame(maxWidth:.infinity,alignment: .leading).font(.title2).bold()) {
                 VStack(spacing: 10){
                     HStack(){
                         Text("High Price").bold()
@@ -60,7 +60,7 @@ struct StockPriceAndInsightsView: View {
                 }.font(.system(size: 18))
                 
             }
-            Section(header: Text("About").frame(maxWidth: .infinity, alignment: .leading).font(.title2)) {
+            Section(header: Text("About").frame(maxWidth: .infinity, alignment: .leading).font(.title2).bold()) {
                 if let profile = stockProfile {
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
@@ -103,12 +103,12 @@ struct StockPriceAndInsightsView: View {
                     }
                 }
             }
-            Section(header: Text("Insights").frame(maxWidth:.infinity,alignment: .leading).font(.title2)){
-                VStack(alignment: .center, spacing: 8) {
+            Section(header: Text("Insights").frame(maxWidth:.infinity,alignment: .leading).font(.title2).bold()){
+                VStack(alignment: .center, spacing: 10) {
                     Text("Insider Sentiments").font(.title2)
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(stockProfile?.name ?? "No Value").frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            Text(stockProfile?.name ?? "No Value").font(.headline).frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             Divider()
                             Text("Total").font(.headline)
                             Divider()
@@ -118,7 +118,7 @@ struct StockPriceAndInsightsView: View {
                             Divider()
                         }
                         Spacer()
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 10) {
                             Text("MSPR").font(.headline).frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             Divider()
                             Text(String(format: "%.2f", self.averageMspr))
@@ -135,7 +135,7 @@ struct StockPriceAndInsightsView: View {
                             Divider()
                         }
                         Spacer()
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 10) {
                             Text("Change").font(.headline).frame(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             Divider()
                             Text(String(format: "%.2f", self.averageChange))
@@ -154,8 +154,8 @@ struct StockPriceAndInsightsView: View {
                         Spacer()
                     }
                 }
-//                ChartsWebView(htmlFilename: "RecommendationChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
-//                ChartsWebView(htmlFilename: "SurpriseChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
+                ChartsWebView(htmlFilename: "RecommendationChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
+                ChartsWebView(htmlFilename: "SurpriseChart", ticker: stockProfile?.ticker ?? "AAPL").frame(width: 380).frame(height:420)
             }
         }
         .padding()

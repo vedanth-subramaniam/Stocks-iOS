@@ -42,6 +42,7 @@
                             },
                             series: [
                                 {
+                                name:obj,
                                 data: data.results.map((rec) => rec["c"]).slice(-16, -1),
                                 color: is_negative == "true"? "red" : "green",
                                 marker: {
@@ -55,7 +56,6 @@
                             .catch(error => {
                                 console.error('Error fetching data:', error);
                             });
-
 
     }
 </script>

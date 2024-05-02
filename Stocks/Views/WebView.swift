@@ -91,6 +91,8 @@ struct HourlyChartsWebView: UIViewRepresentable {
 
 #Preview {
 //    ChartsWebView(htmlFilename: "SupriseChart", ticker: "TSLA")
-    HourlyChartsWebView(htmlFilename: "HourlyCharts", ticker: "TSLA", color: "true")
+    HourlyChartsWebView(htmlFilename: "HourlyCharts", ticker: "TSLA", color: "false")
     
 }
+
+// Referred to ChatGPT for the Web UI class

@@ -6,14 +6,12 @@
 //
 import Foundation
 
-// Define the root of the JSON response
 struct StockSummaryResponse: Codable {
     let stockProfile: StockProfile
     let latestPrice: LatestPrice
     let companyPeers: [String]
 }
 
-// Define each nested object in the JSON
 struct StockProfile: Codable {
     let country: String?
     let currency: String?
@@ -31,12 +29,12 @@ struct StockProfile: Codable {
 }
 
 struct LatestPrice: Codable {
-    let c: Double?  // Current price
-    let d: Double?  // Change
-    let dp: Double? // Change percent
-    let h: Double?  // High price of the day
-    let l: Double?  // Low price of the day
-    let o: Double?  // Opening price of the day
-    let pc: Double? // Previous close price
-    let t: Int?     // Timestamp
+    let c: Double?
+    let d: Double?
+    let dp: Double?
+    let h: Double?
+    let l: Double?
+    let o: Double?
+    let pc: Double?
+    let t: Int?
 }

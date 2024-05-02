@@ -29,7 +29,6 @@ struct NewsArticleRow: View {
                     Text(article.headline)
                         .font(.headline)
                         .fontWeight(.semibold)
-                        .lineLimit(2)
                         .foregroundColor(.primary)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                 }
@@ -111,7 +110,6 @@ struct FirstNewsArticleRow: View {
                     Text(article.headline)
                         .font(.headline)
                         .fontWeight(.semibold)
-                        .lineLimit(2)
                         .foregroundColor(.primary)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/).padding(.horizontal)
                 }
@@ -187,16 +185,14 @@ struct NewsDetailView: View {
                     }
                     HStack {
                         Image("TwitterIcon")
-                            .resizable()// Use the name of your image set
-                            .aspectRatio(contentMode: .fit)
+                            .resizable()
                             .frame(width: 50, height: 50)
                             .onTapGesture {
                                 shareOnTwitter(newsTitle: news.headline, newsURL: news.url)
                             }
                         
-                        Image("FacebookIcon") // Use the name of your image set
+                        Image("FacebookIcon")
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
                             .frame(width: 50, height: 50)
                             .onTapGesture {
                                 shareOnFacebook(newsTitle: news.headline, newsURL: news.url)
@@ -230,7 +226,6 @@ struct NewsDetailView: View {
     }
     
     func shareOnFacebook(newsTitle: String, newsURL: String) {
-        // Construct the post text with the news title and URL
         print("Sharing on facebook")
         let postText = "\(newsTitle): \(newsURL)"
         if let url = URL(string: "https://www.facebook.com/sharer/sharer.php?u=\(newsURL)") {
@@ -240,5 +235,5 @@ struct NewsDetailView: View {
 }
 
 #Preview {
-    NewsArticleRow(article: NewsArticle(category: "company", datetime: 1714288946.0, headline: "Wall Street Breakfast: The Week Ahead", id: 127283245, image: "https://static.seekingalpha.com/cdn/s3/uploads/getty_images/2099872675/image_2099872675.jpg?io=getty-c-w1536", related: "AAPL", source: "SeekingAlpha", summary: "This article discusses the upcoming events in the financial world, including the Federal Reserve meeting, corporate earnings, IPOs, and investor events.", url: "https://finnhub.io/api/news?id=7be97f283d93041833ca7fa1618b6ac8f1ae4baee4b9c7769a9c7367dd3afaa9"))
+    FirstNewsArticleRow(article: NewsArticle(category: "company", datetime: 1714288946.0, headline: "Wall Street Breakfast: The Week Ahead sdffsfsdfdsfxassaxasxas", id: 127283245, image: "https://static.seekingalpha.com/cdn/s3/uploads/getty_images/2099872675/image_2099872675.jpg?io=getty-c-w1536", related: "AAPL", source: "SeekingAlpha", summary: "This article discusses the upcoming events in the financial world, including the Federal Reserve meeting, corporate earnings, IPOs, and investor events.", url: "https://finnhub.io/api/news?id=7be97f283d93041833ca7fa1618b6ac8f1ae4baee4b9c7769a9c7367dd3afaa9"))
 }

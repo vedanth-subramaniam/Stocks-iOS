@@ -16,7 +16,7 @@ struct ToastView: View {
             .padding()
             .background(Color.gray)
             .foregroundColor(Color.white)
-            .cornerRadius(10)
+            .cornerRadius(15)
             .opacity(isShowing ? 1 : 0)
             .animation(.easeInOut, value: isShowing)
             .onAppear {

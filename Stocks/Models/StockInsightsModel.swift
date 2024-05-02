@@ -7,13 +7,11 @@
 
 import Foundation
 
-// Define the struct for stock recommendations
 struct StockRecommendation: Codable {
     var buy, hold, sell, strongBuy, strongSell: Int
     var period, symbol: String
 }
 
-// Define the struct for insider sentiments
 struct InsiderSentimentData: Codable {
     var symbol: String
     var year, month, change: Int
@@ -25,7 +23,6 @@ struct InsiderSentiments: Codable {
     var symbol: String
 }
 
-// Define the struct for company earnings
 struct CompanyEarning: Codable {
     var actual, estimate, surprise, surprisePercent: Double
     var period: String
@@ -34,7 +31,6 @@ struct CompanyEarning: Codable {
     var symbol: String
 }
 
-// Define the main struct that includes all parts of the API response
 struct StockInsightsResponse: Codable {
     var stockRecommendations: [StockRecommendation]
     var insiderSentiments: InsiderSentiments

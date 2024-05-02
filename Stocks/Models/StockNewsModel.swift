@@ -27,5 +27,3 @@ struct NewsArticle: Codable {
     }
     
 }
-
-// Define the struct to handle the array of news articles, if neede

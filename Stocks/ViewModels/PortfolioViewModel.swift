@@ -25,7 +25,9 @@ class PortfolioViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self?.portfolioStocks = stocks
                     self?.calculateNetWorth()
-                    self?.isLoadingHomePage = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self?.isLoadingHomePage = false
+                    }
                 }
             } else if let error = error {
                 print("Error fetching portfolio data: \(error.localizedDescription)")

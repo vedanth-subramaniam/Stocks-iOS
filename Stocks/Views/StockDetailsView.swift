@@ -36,7 +36,7 @@ struct StockDetailsView: View {
                     Section(){
                         StockBasicDetailsView(stock: stock, stockSummaryResponse: self.stockSummaryResponse)
                             
-                    }.padding()
+                    }
                     
                     Section(){
                         TabView{
@@ -47,11 +47,11 @@ struct StockDetailsView: View {
                     }
                     Section(header: Text("Portfolio").fontWeight(.semibold).font(.title).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading).padding()){
                         PortfolioView(stock:stock)
-                    }.padding(.horizontal)
+                    }
                     
                     Section(){
                         StockPriceAndInsightsView(stockSummaryResponse: stockSummaryResponse, stockInsightsResponse: stockInsightsResponse)
-                    }.padding(.horizontal)
+                    }
                     Section() {
                         VStack(){
                             Text("News")
@@ -61,9 +61,9 @@ struct StockDetailsView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             if let news = stockNewsResponse, !news.isEmpty {
                                 FirstNewsArticleRow(article: news.first!)
-                                    .padding()
+                                    
                                 ForEach(Array(news.dropFirst().enumerated()), id: \.element.id) { index, article in
-                                    NewsArticleRow(article: article).padding()
+                                    NewsArticleRow(article: article)
                                     
                                 }
                             }
@@ -88,8 +88,7 @@ struct StockDetailsView: View {
                 ToastView(message: toastMessage, isShowing: $showingToast)
                     .animation(.easeInOut, value: showingToast)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .padding(.bottom),
-                alignment: .bottom  // Align the overlay itself to the bottom
+                   
             )
     }
     
@@ -168,14 +167,12 @@ struct StockDetailsView: View {
     
     private var toggleButton: some View {
         Button(action: {
-            // Toggle the isToggled state when button is tapped
             isFavToggled.toggle()
             handleToggleChange()
         }) {
             Image(systemName: "plus")
                 .foregroundColor(isFavToggled ? .white : .blue)
                 .font(.system(size: 10, weight: .bold))
-                .padding(7)
                 .background(Circle().fill(isFavToggled ? .blue : .white))
                 .overlay(Circle().stroke(isFavToggled ? .white : .blue, lineWidth: 2))
         }
@@ -231,5 +228,5 @@ struct StockBasicDetailsView: View {
 }
 
 #Preview {
-    StockDetailsView(stock: StockTicker(ticker: "AAPL"))
+    StockDetailsView(stock: StockTicker(ticker: "NVDA"))
 }

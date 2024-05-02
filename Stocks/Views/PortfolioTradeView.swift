@@ -96,7 +96,7 @@ struct PortfolioView: View {
 
 struct TradeSheetView: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var portfolioViewModel = PortfolioViewModel()  // Changed to StateObject to ensure it persists correctly
+    @StateObject var portfolioViewModel = PortfolioViewModel()
     @State var numberOfShares: String = "0"
     @State private var showingToast = false
     @State private var toastMessage = ""
@@ -141,7 +141,7 @@ struct TradeSheetView: View {
             
             Spacer()
             
-            Text("\(String(format: "%.2f", portfolioViewModel.stockWalletBalance?.balance ?? 0)) available to buy AAPL")
+            Text("\(String(format: "%.2f", portfolioViewModel.stockWalletBalance?.balance ?? 0)) available to buy " + (portfolioViewModel.portfolioRecord?.ticker ?? "AAPL"))
                 .font(.callout)
                 .foregroundColor(.gray)
                 .padding(.bottom)
@@ -223,7 +223,6 @@ struct SuccessModalView: View {
             Spacer()
             
             Button(action: {
-                // Action for the button
                 show = false
                 print("Done button pressed")
             }) {

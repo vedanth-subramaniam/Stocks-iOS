@@ -52,13 +52,11 @@ class ApiService {
         let url = "http://localhost:8080/insertIntoPortfolio"
         
         if let jsonData = try? JSONEncoder().encode(portfolioRecord) {
-            // Create an URLRequest object
             var request = URLRequest(url: URL(string: url)!)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = jsonData
             
-            // Send the request with Alamofire
             AF.request(request).responseDecodable(of: ApiResponse.self) { response in
                 switch response.result {
                 case .success(let apiResponse):
