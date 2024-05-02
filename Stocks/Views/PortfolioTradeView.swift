@@ -167,10 +167,14 @@ struct TradeSheetView: View {
         )
         .sheet(isPresented: $showSuccessModal) {
             SuccessModalView(message: transactionMessage, show: $showSuccessModal)
-        }        .onReceive(portfolioViewModel.$toastMessage, perform: { newMessage in
+        }        
+        .onReceive(portfolioViewModel.$toastMessage, perform: { newMessage in
             if !newMessage.isEmpty {
                 self.toastMessage = newMessage
                 self.showingToast = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.showingToast = false
+                }
             }
         })
         .onReceive(portfolioViewModel.$transactionMessage, perform: { newMessage in

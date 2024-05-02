@@ -186,11 +186,17 @@ struct StockDetailsView: View {
             print("adding to fav")
             self.toastMessage = "Added " + stock.ticker + " to favorites"
             self.showingToast = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.showingToast = false
+            }
             favouriteModel.addToFavourites(ticker: stock.ticker, companyName: stockSummaryResponse?.stockProfile.name ?? "")
         } else {
             print("removing from fav")
             self.toastMessage = "Removed " + stock.ticker + " from favorites"
             self.showingToast = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.showingToast = false
+            }
             favouriteModel.removeFromFavourites(ticker: stock.ticker)
         }
     }
