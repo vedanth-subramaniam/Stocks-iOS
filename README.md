@@ -35,7 +35,7 @@ This comprehensive stock market application is designed to provide users with a 
 
 ### Steps to install
 1. #### Cloning the repository: 
-   - [x] Clone respository using `git clone https://github.com/staticshreyas/MyEventHub.git` 
+   - [x] Clone respository using `git clone https://github.com/vedanth-subramaniam/Stocks-iOS.git` 
 
 * [NodeJS](#)
 * [Swift](#)
